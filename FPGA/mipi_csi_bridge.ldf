@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BaliProject version="3.2" title="mipi_csi_bridge" device="LCMXO3LF-6900C-5BG256C" default_implementation="mipi_bridge">
+    <Options/>
+    <Implementation title="mipi_bridge" dir="mipi_bridge" description="mipi_bridge" synthesis="lse" default_strategy="Strategy1">
+        <Options def_top="mipi_bridge"/>
+        <Source name="mipi_bridge.v" type="Verilog" type_short="Verilog">
+            <Options top_module="mipi_bridge"/>
+        </Source>
+        <Source name="mipi_rx_ddr.ipx" type="IPX_Module" type_short="IPX" excluded="TRUE">
+            <Options/>
+        </Source>
+        <Source name="mipi_rx_ddr.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="tb_rx_byte_aligner.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="tb_rx_lane_aligner.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="mipi_csi_packet_decoder.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="tb_mipi_csi_packet_decoder.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="rgb_to_yuv.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="debayer_filter.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="mipi_rx_raw10_depacker.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="tb_mipi_rx_raw10_repacker.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="line_ram_dp.ipx" type="IPX_Module" type_short="IPX" excluded="TRUE">
+            <Options/>
+        </Source>
+        <Source name="line_ram_dp.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="tb_mipi_bridge.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="tb_debayer_filter.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="tb_line_ram_dp_tmpl.v" type="Verilog" type_short="Verilog" syn_sim="SimOnly">
+            <Options/>
+        </Source>
+        <Source name="output_reformatter.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="mipi_rx_lane_aligner.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="mipi_rx_byte_aligner.v" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="mipi_bridge/mipi_bridge.xcf" type="Programming Project File" type_short="Programming">
+            <Options/>
+        </Source>
+        <Source name="mipi_csi_bridge.lpf" type="Logic Preference" type_short="LPF">
+            <Options/>
+        </Source>
+        <Source name="sim/sim.spf" type="Simulation Project File" type_short="SPF">
+            <Options/>
+        </Source>
+    </Implementation>
+    <Strategy name="Strategy1" file="mipi_csi_bridge1.sty"/>
+</BaliProject>

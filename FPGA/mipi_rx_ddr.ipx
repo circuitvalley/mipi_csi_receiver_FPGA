@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiamondModule name="mipi_rx_ddr" module="mipi_rx_ddr" VendorName="Lattice Semiconductor Corporation" generator="IPexpress" date="2020 01 23 21:47:26.575" version="6.0" type="Module" synthesis="lse" source_format="Verilog HDL">
+  <Package>
+		<File name="mipi_rx_ddr.lpc" type="lpc" modified="2020 01 23 21:47:24.581"/>
+		<File name="mipi_rx_ddr.v" type="top_level_verilog" modified="2020 01 23 21:47:24.626"/>
+		<File name="mipi_rx_ddr_tmpl.v" type="template_verilog" modified="2020 01 23 21:47:24.627"/>
+  </Package>
+</DiamondModule>

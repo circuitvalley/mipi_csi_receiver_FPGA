@@ -19,5 +19,5 @@ License][cc-by].
 [cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
 [cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
 
-[![Video](https://raw.githubusercontent.com/circuitvalley/mipi_csi_receiver_FPGA/master/Hardware/IMX219/diy_imx219_board_4_lane_mipi_csi_raspberrypi_camera_fpga_mipi_csi%20(3)%20(1).JPG width=100)](https://www.youtube.com/watch?v=GFmE3KYa5zs)
+[![Video](https://raw.githubusercontent.com/circuitvalley/mipi_csi_receiver_FPGA/master/Hardware/IMX219/diy_imx219_board_4_lane_mipi_csi_raspberrypi_camera_fpga_mipi_csi%20(3)%20(1).JPG | width=100)](https://www.youtube.com/watch?v=GFmE3KYa5zs)
 

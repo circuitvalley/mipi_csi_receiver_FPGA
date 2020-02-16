@@ -11,7 +11,7 @@ work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.
 */
 
 /*
-Received Raw aligned bits from DDR RX module outputs Aligned bytes
+Received Raw unaligned bits from DDR RX module outputs Aligned bytes
 Bytes on MIPI lane does not have any defined byte boundary so this modules Looks for always constant first byte 0xB8 on wire, 
 once 0xB8 is found, byte boundary offset is determined, set output valid to active and start outputting correct bytes
 stays reset when data lane are in MIPI LP state  

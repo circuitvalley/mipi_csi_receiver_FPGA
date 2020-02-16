@@ -31,8 +31,7 @@ https://www.circuitvalley.com/2020/02/imx219-camera-mipi-csi-receiver-fpga-latti
 </a>
 
 <a href="https://www.youtube.com/watch?v=GFmE3KYa5zs">
-<img src="
-https://raw.githubusercontent.com/circuitvalley/mipi_csi_receiver_FPGA/master/Hardware/Lattice%20MachXO3%20USB3%20FX3%20Interface%20Board/diy_imx219_mipi_csi_camera_fpga_machxo3lf.JPG" alt="IMX219" width="480" height="480">
+<img src="https://raw.githubusercontent.com/circuitvalley/mipi_csi_receiver_FPGA/master/Hardware/Lattice%20MachXO3%20USB3%20FX3%20Interface%20Board/diy_imx219_mipi_csi_camera_fpga_machxo3lf.JPG" alt="IMX219" width="560" height="560">
 </a>
 
 

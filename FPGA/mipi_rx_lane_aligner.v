@@ -11,7 +11,7 @@ work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.
 */
 
 /*
-Receives multiple lane aligned data from mipi rx byte aligner @mipi byte clock  outputs lane aligned data 
+Receives multiple lane, byte aligned data from mipi rx byte aligner @mipi byte clock  outputs lane aligned data 
 in a multi-lane mipi bus, data on different lane may appear at different offset so this module will wait till of the all lanes have valid output 
 start outputting lane aligned data so byte x from all the lanes outputted at same timescale
 */
@@ -43,7 +43,8 @@ reg lane_valid_reg;
 
 reg [3:0]i;
 reg [3:0]last_sync; //which lane was delayed most , which received sync byte at last 
-// TODO: Find why async reset with !(|bytes_valid_i) cause whole system reset;
+
+// TODO: Find why async reset with !(|bytes_valid_i) cause whole system reset;
 
 always @(posedge clk_i) 
 begin

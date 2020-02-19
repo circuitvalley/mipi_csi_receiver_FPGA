@@ -95,7 +95,7 @@ static image_sensor_config_t sensor_config = {
 		.startx = 2,
 		.starty = 2,
 	},
-	.mode_1280x720_30 = {
+	.mode_1280x720_30 = {		//only 1280 x 720 30 and 60 FPS are functional reset WIP
 		.integration = 0x0633,
 		.gain = 0x80,
 		.linelength = 0xD78,

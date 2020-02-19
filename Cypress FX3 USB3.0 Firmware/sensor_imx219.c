@@ -89,18 +89,19 @@ static const imx219_reg_t mode_default[]={
 
 static image_sensor_config_t sensor_config = {
 	.sensor_mode = 0x01,
+
 	.mode_640x480_30 = {
-			.integration = 0x0633,
-			.gain = 0x80,
-			.linelength = 0xD78,
-			.framelength = 0x6E3,
-			.startx = 1320,
-			.starty = 990,
-			.endx = 1960,
-			.endy = 1481,
-			.width = 640,
-			.height = 480,
-			.test_pattern = 0
+		.integration = 0x0633,
+		.gain = 0x80,
+		.linelength = 0xD78,
+		.framelength = 0x6E3,
+		.startx = 1320,
+		.starty = 990,
+		.endx = 1960,
+		.endy = 1481,
+		.width = 640,
+		.height = 480,
+		.test_pattern = 0
 	},
 	.mode_1280x720_30 = {
 		.integration = 0x0633,
@@ -128,36 +129,58 @@ static image_sensor_config_t sensor_config = {
 		.height = 720,
 		.test_pattern = 0
 	},
-	.mode_1920x1080 = {
+	.mode_1280x720_120 = {		//Camera output @120 but, USB causes issue
+		.integration = 0x0340,
+		.gain = 0x80,
 		.linelength = 0xD78,
-		.framelength = 0x9F0,
-		.startx = 4,
-		.starty = 4,
+		.framelength = 0x349,
+		.startx = 0x2A8,
+		.starty = 0x2B4,
+		.endx = 0xA27,
+		.endy = 0x6EB,
+		.width = 1280,
+		.height = 720,
+		.test_pattern = 0
 	},
-	.mode_1280x720_180 = {
+	.mode_1920x1080_30 = {		//camera output 1920x1080 @30FPS
+		.integration = 0x0833,
+		.gain = 0x80,
+		.linelength = 0x1500,
+		.framelength = 0x868,
+		.startx = 0x2A8,
+		.starty = 0x2B4,
+		.endx = 0xA27,
+		.endy = 0x6EB,
+		.width = 1920,
+		.height = 1080,
+		.test_pattern = 0
+	},
+	.mode_1920x1080_60 = {		//camera output 1920x1080 @60FPS
+		.integration = 0x0340,
+		.gain = 0x80,
+		.linelength = 0x1280,
+		.framelength = 0x4C8,
+		.startx = 0x2A8,
+		.starty = 0x2B4,
+		.endx = 0xA27,
+		.endy = 0x6EB,
+		.width = 1920,
+		.height = 1080,
+		.test_pattern = 0
+	},
+
+	.mode_640x480_200 = {
+		.integration = 0x01E0,
+		.gain = 0x80,
 		.linelength = 0xD78,
-		.framelength = 0x9F0,
-		.startx = 4,
-		.starty = 4,
-	},
-	.mode_1920x1080_60 = {
-		.linelength = 0xD78,
-		.framelength = 0x48e,
-		.startx = 0,
-		.starty = 0,
-	},
-	.mode_640x480_210 = {			//tested with 210 FPS
-			.integration = 0x01E0,
-			.gain = 0x80,
-			.linelength = 0xD78,
-			.framelength = 0x1F3,
-			.startx = 1320,
-			.starty = 990,
-			.endx = 1960,
-			.endy = 1481,
-			.width = 640,
-			.height = 480,
-			.test_pattern = 0
+		.framelength = 0x1F3,
+		.startx = 1320,
+		.starty = 990,
+		.endx = 1960,
+		.endy = 1481,
+		.width = 640,
+		.height = 480,
+		.test_pattern = 0
 	},
 };
 
@@ -337,7 +360,7 @@ void SensorInit (void)
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
 
-	sensor_configure_mode(&sensor_config.mode_640x480_200);
+	sensor_configure_mode(&sensor_config.mode_1920x1080_60);
 }
 
 

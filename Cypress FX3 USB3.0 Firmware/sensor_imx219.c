@@ -45,12 +45,12 @@ static const imx219_reg_t mode_default[]={
 		 {REG_BINNING_V,		0x00},	//binning H 0 off 1 x2 2 x4 3 x2 analog
 		 {REG_CSI_FORMAT_C,		0x0A},	//CSI Data format A-> 10bit
 		 {REG_CSI_FORMAT_D,		0x0A},	//CSI Data format
-		 {REG_VTPXCK_DIV,		0x05},	//vtpxclkd_div	5
-		 {REG_VTSYCK_DIV,		0x01},	//vtsclk _div  1
+		 {REG_VTPXCK_DIV,		0x04},	//vtpxclkd_div	5 301
+		 {REG_VTSYCK_DIV,		0x01},	//vtsclk _div  1	303
 		 {REG_PREPLLCK_VT_DIV,	0x03},	//external oscillator /3
 		 {REG_PREPLLCK_OP_DIV,	0x03},	//external oscillator /3
 		 {REG_PLL_VT_MPY_MSB,	0x00},	//PLL_VT multiplizer
-		 {REG_PLL_VT_MPY_LSB,	0x39},	// 0x30 ~33 , 0x57 ~60	//Changes Frame rate with , integration register 0x15a
+		 {REG_PLL_VT_MPY_LSB,	0x57},	// 0x30 ~33 , 0x57 ~60	//Changes Frame rate with , integration register 0x15a  307
 		 {REG_OPPXCK_DIV,		0x0A},	//oppxck_div
 		 {REG_OPSYCK_DIV,		0x01},	//opsysck_div
 		 {REG_PLL_OP_MPY_MSB,	0x00},	//PLL_OP
@@ -89,13 +89,20 @@ static const imx219_reg_t mode_default[]={
 
 static image_sensor_config_t sensor_config = {
 	.sensor_mode = 0x01,
-	.mode_640x480 = {
-		.linelength = 0xD78,
-		.framelength = 0x534,
-		.startx = 2,
-		.starty = 2,
+	.mode_640x480_30 = {
+			.integration = 0x0633,
+			.gain = 0x80,
+			.linelength = 0xD78,
+			.framelength = 0x6E3,
+			.startx = 1320,
+			.starty = 990,
+			.endx = 1960,
+			.endy = 1481,
+			.width = 640,
+			.height = 480,
+			.test_pattern = 0
 	},
-	.mode_1280x720_30 = {		//only 1280 x 720 30 and 60 FPS are functional reset WIP
+	.mode_1280x720_30 = {
 		.integration = 0x0633,
 		.gain = 0x80,
 		.linelength = 0xD78,
@@ -139,17 +146,17 @@ static image_sensor_config_t sensor_config = {
 		.startx = 0,
 		.starty = 0,
 	},
-	.mode_640x480_200 = {
-			.integration = 0x0351,
+	.mode_640x480_210 = {			//tested with 210 FPS
+			.integration = 0x01E0,
 			.gain = 0x80,
-			.linelength = 0xDE7,
-			.framelength = 0x355,
-			.startx = 0x2A8,
-			.starty = 0x2B4,
-			.endx = 0xA27,
-			.endy = 0x6EB,
-			.width = 1280,
-			.height = 720,
+			.linelength = 0xD78,
+			.framelength = 0x1F3,
+			.startx = 1320,
+			.starty = 990,
+			.endx = 1960,
+			.endy = 1481,
+			.width = 640,
+			.height = 480,
 			.test_pattern = 0
 	},
 };
@@ -238,28 +245,30 @@ static void set_mirror_flip(uint8_t image_mirror)
 	uint8_t  iTemp;
 
 	image_mirror = IMAGE_NORMAL;
-	//CyU3PDebugPrint(4,"set_mirror_flip function\n");
-   // iTemp = sensor_i2c_read(0x0172) & 0x03;	//Clear the mirror and flip bits.
+    sensor_i2c_read(REG_IMG_ORIENT ,  iTemp);
+    iTemp = iTemp & 0x03;
     switch (image_mirror)
     {
         case IMAGE_NORMAL:
-            sensor_i2c_write(0x0172, iTemp | 0x03);	//Set normal
+            sensor_i2c_write(REG_IMG_ORIENT, iTemp | 0x03);	//Set normal
             break;
         case IMAGE_V_MIRROR:
-            sensor_i2c_write(0x0172, iTemp | 0x01);	//Set flip
+            sensor_i2c_write(REG_IMG_ORIENT, iTemp | 0x01);	//Set flip
             break;
         case IMAGE_H_MIRROR:
-            sensor_i2c_write(0x0172, iTemp | 0x02);	//Set mirror
+            sensor_i2c_write(REG_IMG_ORIENT, iTemp | 0x02);	//Set mirror
             break;
         case IMAGE_HV_MIRROR:
-            sensor_i2c_write(0x0172, iTemp);	//Set mirror and flip
+            sensor_i2c_write(REG_IMG_ORIENT, iTemp);	//Set mirror and flip
             break;
     }
 }
 
 void sensor_configure_mode(imgsensor_mode_t * mode)
 {
-	//set_mirror_flip(mode->mirror);
+	set_mirror_flip(mode->mirror);
+	camera_stream_on(false);
+
 	sensor_i2c_write(REG_INTEGRATION_TIME_MSB, GET_WORD_MSB(mode->integration));
 	sensor_i2c_write(REG_INTEGRATION_TIME_LSB, GET_WORD_LSB(mode->integration));
 	sensor_i2c_write(REG_ANALOG_GAIN, 	mode->gain);
@@ -328,7 +337,7 @@ void SensorInit (void)
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
 
-	sensor_configure_mode(&sensor_config.mode_1280x720_60);
+	sensor_configure_mode(&sensor_config.mode_640x480_200);
 }
 
 

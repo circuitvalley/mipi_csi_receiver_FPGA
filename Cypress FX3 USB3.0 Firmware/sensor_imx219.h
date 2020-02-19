@@ -133,7 +133,7 @@ typedef struct imgsensor_mode_struct_s {
 typedef struct image_sensor_config_s {
 	uint8_t 	sensor_mode;
 
-	imgsensor_mode_t mode_640x480;		//640x480 30fps
+	imgsensor_mode_t mode_640x480_30;		//640x480 30fps
 	imgsensor_mode_t mode_1280x720_30;		//1280x720 30fps
 	imgsensor_mode_t mode_1280x720_60;		//1280x720 60fps
 	imgsensor_mode_t mode_1920x1080;		//1920x1080 30fps

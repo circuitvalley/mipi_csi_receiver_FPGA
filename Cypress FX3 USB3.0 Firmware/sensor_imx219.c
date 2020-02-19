@@ -107,7 +107,7 @@ static image_sensor_config_t sensor_config = {
 		.integration = 0x0633,
 		.gain = 0x80,
 		.linelength = 0xD78,
-		.framelength = 0x6E3,
+		.framelength = 0xBE3,
 		.startx = 4,
 		.starty = 4,
 		.endx = 0xA27,
@@ -120,7 +120,7 @@ static image_sensor_config_t sensor_config = {
 		.integration = 0x0351,
 		.gain = 0x80,
 		.linelength = 0xDE7,
-		.framelength = 0x355,
+		.framelength = 0x659,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
@@ -169,17 +169,17 @@ static image_sensor_config_t sensor_config = {
 		.test_pattern = 0
 	},
 
-	.mode_640x480_200 = {
-		.integration = 0x01E0,
-		.gain = 0x80,
+	.mode_640x128_682 = {	//camera output 640x128 pixel @682 FPS
+		.integration = 0x90,
+		.gain = 200,
 		.linelength = 0xD78,
-		.framelength = 0x1F3,
+		.framelength = 0x94,
 		.startx = 1320,
 		.starty = 990,
 		.endx = 1960,
 		.endy = 1481,
 		.width = 640,
-		.height = 480,
+		.height = 128,
 		.test_pattern = 0
 	},
 };
@@ -360,7 +360,7 @@ void SensorInit (void)
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
 
-	sensor_configure_mode(&sensor_config.mode_1920x1080_60);
+	sensor_configure_mode(&sensor_config.mode_1280x720_30);
 }
 
 
@@ -375,7 +375,7 @@ uint8_t SensorGetBrightness (void)
 
 void SensorSetBrightness (uint8_t input)
 {
-	sensor_i2c_write (REG_ANALOG_GAIN, input);
+	//sensor_i2c_write (REG_ANALOG_GAIN, input);
 }
 
 uint8_t sensor_get_contrast (void)

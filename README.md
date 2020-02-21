@@ -1,4 +1,4 @@
-# MIPI CSI Receiver on FPGA
+# MIPI CSI-2 Receiver on FPGA
 
 This Repo contains hardware, Verilog source and USB3.0 Controller C source for generic FPGA CSI receiver. No FPGA hardware specific components has been used so can be easily ported to any low cost FPGA. 
 
@@ -9,8 +9,8 @@ Latest Test Has been done at
 640x480 30FPS
 640x480 200FPS
 
-MIPI CSI Receiver on Lattice FPGA (c) by Gaurav Singh www.CircuitValley.com
-MIPI CSI Receiver on Lattice FPGA is licensed under a
+MIPI CSI-2 Receiver on Lattice FPGA (c) by Gaurav Singh www.CircuitValley.com
+MIPI CSI-2 Receiver on Lattice FPGA is licensed under a
 Creative Commons Attribution 3.0 Unported License.
 You should have received a copy of the license along with this
 work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.

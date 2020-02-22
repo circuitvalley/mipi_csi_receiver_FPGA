@@ -50,11 +50,11 @@ static const imx219_reg_t mode_default[]={
 		 {REG_PREPLLCK_VT_DIV,	0x03},	//external oscillator /3
 		 {REG_PREPLLCK_OP_DIV,	0x03},	//external oscillator /3
 		 {REG_PLL_VT_MPY_MSB,	0x00},	//PLL_VT multiplizer
-		 {REG_PLL_VT_MPY_LSB,	0x57},	// 0x30 ~33 , 0x57 ~60	//Changes Frame rate with , integration register 0x15a  307
+		 {REG_PLL_VT_MPY_LSB,	0x58},	//Changes Frame rate with , integration register 0x15a
 		 {REG_OPPXCK_DIV,		0x0A},	//oppxck_div
 		 {REG_OPSYCK_DIV,		0x01},	//opsysck_div
 		 {REG_PLL_OP_MPY_MSB,	0x00},	//PLL_OP
-		 {REG_PLL_OP_MPY_LSB,	0x30}, // 8Mhz x 0x57 ->696Mhz -> 348Mhz |  0x30 -> 200Mhz | 0x40 -> 256Mhz
+		 {REG_PLL_OP_MPY_LSB,	0x32}, 	// 8Mhz x 0x57 ->696Mhz -> 348Mhz |  0x32 -> 200Mhz | 0x40 -> 256Mhz
 		 {0x455E,				0x00},	//magic?
 		 {0x471E,				0x4B},
 		 {0x4767,				0x0F},
@@ -90,11 +90,11 @@ static const imx219_reg_t mode_default[]={
 static image_sensor_config_t sensor_config = {
 	.sensor_mode = 0x01,
 
-	.mode_640x480_30 = {
-		.integration = 0x0633,
-		.gain = 0x80,
+	.mode_640x480_30 = { //pixclk 696/4
+		.integration = 0x0B00,		//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
+		.gain = 0x70,
 		.linelength = 0xD78,
-		.framelength = 0x6E3,
+		.framelength = 3402,
 		.startx = 1320,
 		.starty = 990,
 		.endx = 1960,
@@ -103,11 +103,25 @@ static image_sensor_config_t sensor_config = {
 		.height = 480,
 		.test_pattern = 0
 	},
+	.mode_640x480_200 = {
+		.integration = 0x0100,
+		.gain = 0x70,
+		.linelength = 0xD78,
+		.framelength = 510,
+		.startx = 1320,
+		.starty = 990,
+		.endx = 1960,
+		.endy = 1481,
+		.width = 640,
+		.height = 480,
+		.test_pattern = 0
+	},
+
 	.mode_1280x720_30 = {
 		.integration = 0x0633,
 		.gain = 0x80,
 		.linelength = 0xD78,
-		.framelength = 0xBE3,
+		.framelength = 3402,
 		.startx = 4,
 		.starty = 4,
 		.endx = 0xA27,
@@ -117,10 +131,10 @@ static image_sensor_config_t sensor_config = {
 		.test_pattern = 0
 	},
 	.mode_1280x720_60 = {
-		.integration = 0x0351,
+		.integration = 0x0633,
 		.gain = 0x80,
 		.linelength = 0xDE7,
-		.framelength = 0x659,
+		.framelength = 1700,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
@@ -130,10 +144,10 @@ static image_sensor_config_t sensor_config = {
 		.test_pattern = 0
 	},
 	.mode_1280x720_120 = {		//Camera output @120 but, USB causes issue
-		.integration = 0x0340,
+		.integration = 0x0300,
 		.gain = 0x80,
 		.linelength = 0xD78,
-		.framelength = 0x349,
+		.framelength = 850,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
@@ -145,8 +159,8 @@ static image_sensor_config_t sensor_config = {
 	.mode_1920x1080_30 = {		//camera output 1920x1080 @30FPS
 		.integration = 0x0833,
 		.gain = 0x80,
-		.linelength = 0x1500,
-		.framelength = 0x868,
+		.linelength = 0x1280,
+		.framelength = 2477,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
@@ -156,10 +170,10 @@ static image_sensor_config_t sensor_config = {
 		.test_pattern = 0
 	},
 	.mode_1920x1080_60 = {		//camera output 1920x1080 @60FPS
-		.integration = 0x0340,
+		.integration = 0x0433,
 		.gain = 0x80,
 		.linelength = 0x1280,
-		.framelength = 0x4C8,
+		.framelength = 1238,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
@@ -375,7 +389,7 @@ uint8_t SensorGetBrightness (void)
 
 void SensorSetBrightness (uint8_t input)
 {
-	//sensor_i2c_write (REG_ANALOG_GAIN, input);
+	sensor_i2c_write (REG_ANALOG_GAIN, input);
 }
 
 uint8_t sensor_get_contrast (void)

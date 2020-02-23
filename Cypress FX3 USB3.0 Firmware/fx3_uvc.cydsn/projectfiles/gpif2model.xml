@@ -88,7 +88,7 @@
       <Action ElementId="LD_DATA_COUNT0" ActionType="LD_DATA_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>4091</CounterLimit>
+        <CounterLimit>8187</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -96,7 +96,7 @@
       <Action ElementId="LD_ADDR_COUNT0" ActionType="LD_ADDR_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>4091</CounterLimit>
+        <CounterLimit>8187</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -109,7 +109,7 @@
       <Action ElementId="LD_DATA_COUNT0" ActionType="LD_DATA_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>4091</CounterLimit>
+        <CounterLimit>8187</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -117,7 +117,7 @@
       <Action ElementId="LD_ADDR_COUNT0" ActionType="LD_ADDR_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>4091</CounterLimit>
+        <CounterLimit>8187</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -137,7 +137,7 @@
       <Action ElementId="LD_ADDR_COUNT0" ActionType="LD_ADDR_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>4091</CounterLimit>
+        <CounterLimit>8187</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
@@ -160,19 +160,19 @@
       <Action ElementId="LD_DATA_COUNT0" ActionType="LD_DATA_COUNT">
         <CounterType>Up</CounterType>
         <CounterLoadValue>0</CounterLoadValue>
-        <CounterLimit>4091</CounterLimit>
+        <CounterLimit>8187</CounterLimit>
         <CounterReloadEnable>Disable</CounterReloadEnable>
         <CounterIncrement>1</CounterIncrement>
         <CounterInterrupt>Mask</CounterInterrupt>
-      </Action>
-      <Action ElementId="DR_GPIO0" ActionType="DR_GPIO">
-        <ControlPinName>OUTPUT1</ControlPinName>
       </Action>
     </State>
     <State ElementId="STATE6" StateType="NormalState">
       <DisplayName>LINE_END_SCK0</DisplayName>
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
       <RepeatCount>0</RepeatCount>
+      <Action ElementId="DR_GPIO0" ActionType="DR_GPIO">
+        <ControlPinName>OUTPUT1</ControlPinName>
+      </Action>
     </State>
     <State ElementId="STATE7" StateType="NormalState">
       <DisplayName>LINE_END_SCK1</DisplayName>
@@ -183,6 +183,9 @@
       <DisplayName>WAIT_TO_FILL_SCK0</DisplayName>
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
       <RepeatCount>0</RepeatCount>
+      <Action ElementId="DR_GPIO0" ActionType="DR_GPIO">
+        <ControlPinName>OUTPUT1</ControlPinName>
+      </Action>
     </State>
     <State ElementId="STATE9" StateType="NormalState">
       <DisplayName>WAIT_TO_FILL_SCK1</DisplayName>
@@ -193,6 +196,9 @@
       <DisplayName>WAIT_FULL_SCK0</DisplayName>
       <RepeatUntillNextTransition>True</RepeatUntillNextTransition>
       <RepeatCount>0</RepeatCount>
+      <Action ElementId="DR_GPIO0" ActionType="DR_GPIO">
+        <ControlPinName>OUTPUT1</ControlPinName>
+      </Action>
     </State>
     <State ElementId="STATE11" StateType="NormalState">
       <DisplayName>WAIT_FULL_SCK1</DisplayName>

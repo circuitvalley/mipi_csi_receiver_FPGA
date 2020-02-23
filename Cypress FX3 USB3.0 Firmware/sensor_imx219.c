@@ -374,7 +374,7 @@ void SensorInit (void)
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
 
-	sensor_configure_mode(&sensor_config.mode_1280x720_30);
+	sensor_configure_mode(&sensor_config.mode_1280x720_120);
 }
 
 

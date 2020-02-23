@@ -74,7 +74,7 @@
 #define CY_FX_EP_BULK_VIDEO_PKT_SIZE    (0x400)         /* 1024 Bytes */
 
 /* UVC Video Streaming Endpoint Packet Count */
-#define CY_FX_EP_BULK_VIDEO_PKTS_COUNT  (0x10)          /* 16 packets (burst of 16) per DMA buffer. */
+#define CY_FX_EP_BULK_VIDEO_PKTS_COUNT  (0x20)          /* 16 packets (burst of 16) per DMA buffer. */
 
 /* DMA buffer size used for video streaming. */
 #define CY_FX_UVC_STREAM_BUF_SIZE       (CY_FX_EP_BULK_VIDEO_PKTS_COUNT * CY_FX_EP_BULK_VIDEO_PKT_SIZE)  /* 16 KB */ //Totoal RAM availabe for dma buffer on CYUSB3014 224KB
@@ -83,7 +83,7 @@
 #define CY_FX_UVC_BUF_FULL_SIZE         (CY_FX_UVC_STREAM_BUF_SIZE - 16)
 
 /* Number of DMA buffers per GPIF DMA thread. */
-#define CY_FX_UVC_STREAM_BUF_COUNT      (4)
+#define CY_FX_UVC_STREAM_BUF_COUNT      (3)
 
 /* Low Byte - UVC Video Streaming Endpoint Packet Size */
 #define CY_FX_EP_BULK_VIDEO_PKT_SIZE_L  (uint8_t)(CY_FX_EP_BULK_VIDEO_PKT_SIZE & 0x00FF)

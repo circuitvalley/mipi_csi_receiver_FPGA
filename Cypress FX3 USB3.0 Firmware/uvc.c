@@ -91,7 +91,7 @@ uint8_t glProbeCtrl[CY_FX_UVC_MAX_PROBE_SETTING] = {
                                    streaming with adjustable compression parameters */
     0x00, 0x00,                 /* Internal video streaming i/f latency in ms */
     DBVAL(MAX_FRAME_SIZE),     /* Max video frame size in bytes */
-    0x00, 0x40, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 16 KB */
+    0x00, 0x80, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 16 KB */
 
 #ifndef FX3_UVC_1_0_SUPPORT
     /* UVC 1.1 Probe Control has additional fields from UVC 1.0 */
@@ -119,7 +119,7 @@ uint8_t glProbeCtrl20[CY_FX_UVC_MAX_PROBE_SETTING] = {
                                    streaming with adjustable compression parameters */
     0x00, 0x00,                 /* Internal video streaming i/f latency in ms */
     0x00, 0x60, 0x09, 0x00,     /* Max video frame size in bytes */
-    0x00, 0x40, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 16 KB */
+    0x00, 0x80, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 16 KB */
 
 #ifndef FX3_UVC_1_0_SUPPORT
     /* UVC 1.1 Probe Control has additional fields from UVC 1.0 */
@@ -456,8 +456,8 @@ CyFxUvcApplnDmaCallback (
                 /* A partially filled buffer indicates the end of the ongoing video frame. */
                 CyFxUVCAddHeader (dmaBuffer.buffer - CY_FX_UVC_MAX_HEADER, CY_FX_UVC_HEADER_EOF);
 
-               	CyU3PDebugPrint (4, "t %d\n", gTotal_bytes);
-                                	gTotal_bytes =0;
+               	//CyU3PDebugPrint (4, "t %d\n", gTotal_bytes);
+                  //              	gTotal_bytes =0;
 
 #ifdef DEBUG_PRINT_FRAME_COUNT
                 glFrameCount++;
@@ -2016,8 +2016,15 @@ main (
     CyU3PReturnStatus_t apiRetStatus;
     CyU3PIoMatrixConfig_t io_cfg;
 
+    CyU3PSysClockConfig_t clk_cfg;
     /* Initialize the device */
-    apiRetStatus = CyU3PDeviceInit (0);
+    clk_cfg.setSysClk400  = CyTrue;
+    clk_cfg.cpuClkDiv     = 2;
+    clk_cfg.dmaClkDiv     = 2;
+    clk_cfg.mmioClkDiv    = 2;
+    clk_cfg.useStandbyClk = CyFalse;
+    clk_cfg.clkSrc        = CY_U3P_SYS_CLK;
+    apiRetStatus = CyU3PDeviceInit (&clk_cfg);
     if (apiRetStatus != CY_U3P_SUCCESS)
     {
         goto handle_fatal_error;

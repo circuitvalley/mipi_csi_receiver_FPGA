@@ -5,6 +5,7 @@ This Repo contains hardware, Verilog source and USB3.0 Controller C source for g
 USB firmware side of the project is still work in progress for higher framerate. 
 
 Latest Test Has been done at</br>
+3280x2464 15FPS</br>
 1920x1080 60FPS</br>
 1920x1080 30FPS</br>
 1280x720  120FPS</br>

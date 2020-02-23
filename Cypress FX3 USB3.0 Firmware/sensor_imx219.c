@@ -143,7 +143,7 @@ static image_sensor_config_t sensor_config = {
 		.height = 720,
 		.test_pattern = 0
 	},
-	.mode_1280x720_120 = {		//Camera output @120 but, USB causes issue
+	.mode_1280x720_120 = {		//Camera output 1280x720 @120 FPS
 		.integration = 0x0300,
 		.gain = 0x80,
 		.linelength = 0xD78,
@@ -156,7 +156,7 @@ static image_sensor_config_t sensor_config = {
 		.height = 720,
 		.test_pattern = 0
 	},
-	.mode_1920x1080_30 = {		//camera output 1920x1080 @30FPS
+	.mode_1920x1080_30 = {		//camera output 1920x1080 @30 FPS
 		.integration = 0x0833,
 		.gain = 0x80,
 		.linelength = 0x1280,
@@ -169,7 +169,7 @@ static image_sensor_config_t sensor_config = {
 		.height = 1080,
 		.test_pattern = 0
 	},
-	.mode_1920x1080_60 = {		//camera output 1920x1080 @60FPS
+	.mode_1920x1080_60 = {		//camera output 1920x1080 @60 FPS
 		.integration = 0x0433,
 		.gain = 0x80,
 		.linelength = 0x1280,

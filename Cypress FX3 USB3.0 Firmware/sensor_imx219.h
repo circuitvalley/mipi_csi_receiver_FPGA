@@ -111,6 +111,8 @@ enum
 };
 
 typedef struct imgsensor_mode_struct_s {
+	uint16_t 	pix_clk_mul;
+	uint16_t 	pix_clk_div;
 	uint8_t 	mirror;
 	uint16_t 	integration;
 	uint16_t 	gain;
@@ -141,6 +143,8 @@ typedef struct image_sensor_config_s {
 	imgsensor_mode_t mode_1280x720_120;	//1280x720 180fps
 	imgsensor_mode_t mode_640x480_200;
 	imgsensor_mode_t mode_640x128_682;
+	imgsensor_mode_t mode_640x80_1000;
+	imgsensor_mode_t mode_3280x2464_15;
 } image_sensor_config_t;
 
 

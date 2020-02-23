@@ -23,10 +23,10 @@ static const imx219_reg_t mode_default[]={
 		 {REG_DPHY_CTRL,		0x00},	//DPHY timing 0-> auot 1-> manual
 		 {REG_EXCK_FREQ_MSB,	0x18},	//external oscillator frequncy 0x18 -> 24Mhz
 		 {REG_EXCK_FREQ_LSB,	0x00},
-		 {REG_FRAME_LEN_MSB,	0x03},	//frame length , Raspberry pi sends this commands continously when recording video @60fps ,writes come at interval of 32ms , Data 355 for resolution 1280x720 command 162 also comes along with data 0DE7 also 15A with data 0200
-		 {REG_FRAME_LEN_LSB,	0x55},
-		 {REG_LINE_LEN_MSB,		0x0d},	//line length D78 def f88 , does not actually affect how many bits on wire in one line does affect how many clock between lines
-		 {REG_LINE_LEN_LSB,		0xE7},	//appears to be having step in value, not every LSb change will reflect on fps
+		 {REG_FRAME_LEN_MSB,	0x06},	//frame length , Raspberry pi sends this commands continously when recording video @60fps ,writes come at interval of 32ms , Data 355 for resolution 1280x720 command 162 also comes along with data 0DE7 also 15A with data 0200
+		 {REG_FRAME_LEN_LSB,	0xE3},
+		 {REG_LINE_LEN_MSB,		0x0d},	//does not directly affect how many bits on wire in one line does affect how many clock between lines
+		 {REG_LINE_LEN_LSB,		0x78},	//appears to be having step in value, not every LSb change will reflect on fps
 		 {REG_X_ADD_STA_MSB,	0x02},	//x start
 		 {REG_X_ADD_STA_LSB,	0xA8},
 		 {REG_X_ADD_END_MSB,	0x0A},	//x end
@@ -35,22 +35,22 @@ static const imx219_reg_t mode_default[]={
 		 {REG_Y_ADD_STA_LSB,	0xB4},
 		 {REG_Y_ADD_END_MSB,	0x06},	//y end
 		 {REG_Y_ADD_END_LSB,	0xEB},
-		 {REG_X_OUT_SIZE_MSB,	0x05},	//resolution 1280 -> 5 00 , 1920 -> 780 , 2048 -> 0x8 0x00
-		 {REG_X_OUT_SIZE_LSB,	0x00},
-		 {REG_Y_OUT_SIZE_MSB,	0x02},	// 720 -> 0x02D0 | 1080 -> 0x438  | this setting changes how many line over wire does not affect frame rate
-		 {REG_Y_OUT_SIZE_LSB,	0xD0},
+		 {REG_X_OUT_SIZE_MSB,	0x07},	//resolution 1280 -> 5 00 , 1920 -> 780 , 2048 -> 0x8 0x00
+		 {REG_X_OUT_SIZE_LSB,	0x80},
+		 {REG_Y_OUT_SIZE_MSB,	0x04},	// 720 -> 0x02D0 | 1080 -> 0x438  | this setting changes how many line over wire does not affect frame rate
+		 {REG_Y_OUT_SIZE_LSB,	0x38},
 		 {REG_X_ODD_INC,		0x01},	//increment
 		 {REG_Y_ODD_INC,		0x01},	//increment
 		 {REG_BINNING_H,		0x00},	//binning H 0 off 1 x2 2 x4 3 x2 analog
 		 {REG_BINNING_V,		0x00},	//binning H 0 off 1 x2 2 x4 3 x2 analog
 		 {REG_CSI_FORMAT_C,		0x0A},	//CSI Data format A-> 10bit
 		 {REG_CSI_FORMAT_D,		0x0A},	//CSI Data format
-		 {REG_VTPXCK_DIV,		0x04},	//vtpxclkd_div	5 301
+		 {REG_VTPXCK_DIV,		0x05},	//vtpxclkd_div	5 301
 		 {REG_VTSYCK_DIV,		0x01},	//vtsclk _div  1	303
 		 {REG_PREPLLCK_VT_DIV,	0x03},	//external oscillator /3
 		 {REG_PREPLLCK_OP_DIV,	0x03},	//external oscillator /3
 		 {REG_PLL_VT_MPY_MSB,	0x00},	//PLL_VT multiplizer
-		 {REG_PLL_VT_MPY_LSB,	0x58},	//Changes Frame rate with , integration register 0x15a
+		 {REG_PLL_VT_MPY_LSB,	0x52},	//Changes Frame rate with , integration register 0x15a
 		 {REG_OPPXCK_DIV,		0x0A},	//oppxck_div
 		 {REG_OPSYCK_DIV,		0x01},	//opsysck_div
 		 {REG_PLL_OP_MPY_MSB,	0x00},	//PLL_OP
@@ -82,7 +82,7 @@ static const imx219_reg_t mode_default[]={
 		 {REG_ANA_GAIN_GLOBAL, 		0x80}, //analog gain , raspberry pi constinouly changes this depending on scense
 		 {REG_INTEGRATION_TIME_MSB, 0x03},	//integration time , really important for frame rate
 		 {REG_INTEGRATION_TIME_LSB, 0x51},
-		// {REG_MODE_SEL,			0x01},
+		 {REG_MODE_SEL,			0x01},
 
 };
 
@@ -91,60 +91,70 @@ static image_sensor_config_t sensor_config = {
 	.sensor_mode = 0x01,
 
 	.mode_640x480_30 = { //pixclk 696/4
-		.integration = 0x0B00,		//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
+		.integration = 2400,		//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
-		.linelength = 0xD78,
-		.framelength = 3402,
+		.linelength = 3448, //0xD78
+		.framelength = 2722,
 		.startx = 1320,
 		.starty = 990,
 		.endx = 1960,
 		.endy = 1481,
 		.width = 640,
-		.height = 480,
+		.height = 482,	//each frame will have two extra line to compensate for debayer crop
 		.test_pattern = 0
 	},
 	.mode_640x480_200 = {
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
 		.integration = 0x0100,
 		.gain = 0x70,
-		.linelength = 0xD78,
+		.linelength = 3448,
 		.framelength = 510,
 		.startx = 1320,
 		.starty = 990,
 		.endx = 1960,
 		.endy = 1481,
 		.width = 640,
-		.height = 480,
+		.height = 482,
 		.test_pattern = 0
 	},
 
 	.mode_1280x720_30 = {
-		.integration = 0x0633,
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
+		.integration = 0x0C00,
 		.gain = 0x80,
-		.linelength = 0xD78,
+		.linelength = 3448,
 		.framelength = 3402,
 		.startx = 4,
 		.starty = 4,
 		.endx = 0xA27,
 		.endy = 0x6EB,
 		.width = 1280,
-		.height = 720,
+		.height = 722,
 		.test_pattern = 0
 	},
 	.mode_1280x720_60 = {
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
 		.integration = 0x0633,
 		.gain = 0x80,
-		.linelength = 0xDE7,
-		.framelength = 1700,
+		.linelength = 0xD78,
+		.framelength = 1701,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
 		.endy = 0x6EB,
 		.width = 1280,
-		.height = 720,
+		.height = 722,
 		.test_pattern = 0
 	},
-	.mode_1280x720_120 = {		//Camera output 1280x720 @120 FPS
-		.integration = 0x0300,
+	.mode_1280x720_120 = {		//Camera output @120
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
+		.integration = 0x0200,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 850,
@@ -153,47 +163,84 @@ static image_sensor_config_t sensor_config = {
 		.endx = 0xA27,
 		.endy = 0x6EB,
 		.width = 1280,
-		.height = 720,
+		.height = 722,
 		.test_pattern = 0
 	},
-	.mode_1920x1080_30 = {		//camera output 1920x1080 @30 FPS
-		.integration = 0x0833,
+	.mode_1920x1080_30 = {		//camera output 1920x1080 @30FPS
+		.pix_clk_mul = 0x50,
+		.pix_clk_div = 0x5,
+		.integration = 0x0900,
 		.gain = 0x80,
-		.linelength = 0x1280,
-		.framelength = 2477,
+		.linelength = 0xD78,
+		.framelength = 2474,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
 		.endy = 0x6EB,
 		.width = 1920,
-		.height = 1080,
+		.height = 1082,
 		.test_pattern = 0
 	},
-	.mode_1920x1080_60 = {		//camera output 1920x1080 @60 FPS
-		.integration = 0x0433,
+	.mode_1920x1080_60 = {		//camera output 1920x1080 @60FPS
+		.pix_clk_mul = 0x50,
+		.pix_clk_div = 0x5,
+		.integration = 0x0400,
 		.gain = 0x80,
-		.linelength = 0x1280,
-		.framelength = 1238,
+		.linelength = 0xD78,
+		.framelength = 1237,
 		.startx = 0x2A8,
 		.starty = 0x2B4,
 		.endx = 0xA27,
 		.endy = 0x6EB,
 		.width = 1920,
-		.height = 1080,
+		.height = 1082,
 		.test_pattern = 0
 	},
 
 	.mode_640x128_682 = {	//camera output 640x128 pixel @682 FPS
-		.integration = 0x90,
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
+		.integration = 140,
 		.gain = 200,
 		.linelength = 0xD78,
-		.framelength = 0x94,
+		.framelength = 149,
 		.startx = 1320,
 		.starty = 990,
 		.endx = 1960,
 		.endy = 1481,
 		.width = 640,
 		.height = 128,
+		.test_pattern = 0
+	},
+
+	.mode_640x80_1000 = {	//camera output 640x80 pixel @1000 FPS
+		.pix_clk_mul = 0x58,
+		.pix_clk_div = 0x4,
+		.integration = 95,
+		.gain = 200,
+		.linelength = 0xD78,
+		.framelength = 102,
+		.startx = 1320,
+		.starty = 990,
+		.endx = 1960,
+		.endy = 1481,
+		.width = 640,
+		.height = 80,
+		.test_pattern = 0
+	},
+	.mode_3280x2464_15 = {	//full frame 15FPS
+		.pix_clk_mul = 0x31,
+		.pix_clk_div = 0x5,
+		.integration = 0xB00,
+		.gain = 200,
+		.linelength = 0xD78,
+		.framelength = 3031,
+		.startx = 0,
+		.starty = 0,
+		.endx = 3279,
+		.endy = 2463,
+		.width = 3280,
+		.height = 2464,
 		.test_pattern = 0
 	},
 };
@@ -305,10 +352,14 @@ void sensor_configure_mode(imgsensor_mode_t * mode)
 {
 	set_mirror_flip(mode->mirror);
 	camera_stream_on(false);
+	sensor_i2c_write(REG_PLL_VT_MPY_MSB, GET_WORD_MSB(mode->pix_clk_mul));
+	sensor_i2c_write(REG_PLL_VT_MPY_LSB, GET_WORD_LSB(mode->pix_clk_mul));
+
+	sensor_i2c_write(REG_VTPXCK_DIV, GET_WORD_LSB(mode->pix_clk_div));
 
 	sensor_i2c_write(REG_INTEGRATION_TIME_MSB, GET_WORD_MSB(mode->integration));
 	sensor_i2c_write(REG_INTEGRATION_TIME_LSB, GET_WORD_LSB(mode->integration));
-	sensor_i2c_write(REG_ANALOG_GAIN, 	mode->gain);
+	sensor_i2c_write(REG_ANALOG_GAIN, 	GET_WORD_LSB(mode->gain));
 	sensor_i2c_write(REG_LINE_LEN_MSB, 	GET_WORD_MSB(mode->linelength));
 	sensor_i2c_write(REG_LINE_LEN_LSB, 	GET_WORD_LSB(mode->linelength));
 
@@ -374,7 +425,7 @@ void SensorInit (void)
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
 
-	sensor_configure_mode(&sensor_config.mode_1280x720_120);
+	sensor_configure_mode(&sensor_config.mode_3280x2464_15);
 }
 
 
@@ -400,6 +451,7 @@ uint8_t sensor_get_contrast (void)
 
 void sensor_set_contrast (uint8_t input)
 {
+
 	sensor_i2c_write (REG_INTEGRATION_TIME_LSB, input);
 }
 
@@ -410,5 +462,6 @@ uint8_t sensor_get_gain (void)
 
 void sensor_set_gain (uint8_t input)
 {
+
 	sensor_i2c_write (REG_TEST_PATTERN_LSB, input);
 }

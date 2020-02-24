@@ -9,9 +9,9 @@
 #include <cyu3gpio.h>
 #include <cyu3utils.h>
 #include "sensor_imx219.h"
+#include "uvc_settings.h"
 
-
-static const imx219_reg_t mode_default[]={
+static const imx219_reg_t mode_default[]={	//default register settings, Resolution and FPS specific settings will be over written
 		 {REG_MODE_SEL,			0x00},
 		 {0x30EB,				0x05},	//access sequence
 		 {0x30EB,				0x0C},
@@ -90,12 +90,12 @@ static const imx219_reg_t mode_default[]={
 static image_sensor_config_t sensor_config = {
 	.sensor_mode = 0x01,
 
-	.mode_640x480_30 = { //pixclk 696/4
+	.mode_640x480_30 = {
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 2400,		//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
+		.integration = 2400,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
-		.linelength = 3448, //0xD78
+		.linelength = 3448, 	//Warning This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
 		.framelength = 2722,
 		.startx = 1320,
 		.starty = 990,
@@ -196,7 +196,6 @@ static image_sensor_config_t sensor_config = {
 		.height = 1082,
 		.test_pattern = 0
 	},
-
 	.mode_640x128_682 = {	//camera output 640x128 pixel @682 FPS
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
@@ -228,7 +227,7 @@ static image_sensor_config_t sensor_config = {
 		.height = 80,
 		.test_pattern = 0
 	},
-	.mode_3280x2464_15 = {	//full frame 15FPS
+	.mode_3280x2464_15 = {	//full frame 3280x2464 @15FPS
 		.pix_clk_mul = 0x31,
 		.pix_clk_div = 0x5,
 		.integration = 0xB00,
@@ -348,6 +347,81 @@ static void set_mirror_flip(uint8_t image_mirror)
     }
 }
 
+void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
+{
+	switch(frame_index)
+	{
+		case FRAME_640x480:
+		{
+			if (interval == INTERVAL_30)
+			{
+				sensor_configure_mode(&sensor_config.mode_640x480_30);
+			}
+			else if(interval == INTERVAL_200)
+			{
+				sensor_configure_mode(&sensor_config.mode_640x480_200);
+			}
+
+		}
+		break;
+		case FRAME_1280x720:
+		{
+			if (interval == INTERVAL_30)
+			{
+				sensor_configure_mode(&sensor_config.mode_1280x720_30);
+			}
+			else if(interval == INTERVAL_60)
+			{
+				sensor_configure_mode(&sensor_config.mode_1280x720_60);
+			}
+			else if(interval == INTERVAL_120)
+			{
+				sensor_configure_mode(&sensor_config.mode_1280x720_120);
+			}
+		}
+		break;
+		case FRAME_1920x1080:
+		{
+			if (interval == INTERVAL_30)
+			{
+				sensor_configure_mode(&sensor_config.mode_1920x1080_30);
+			}
+			else if(interval == INTERVAL_60)
+			{
+				sensor_configure_mode(&sensor_config.mode_1920x1080_60);
+			}
+		}
+		break;
+		case FRAME_3280x2462:
+		{
+			if (interval == INTERVAL_15)
+			{
+				sensor_configure_mode(&sensor_config.mode_3280x2464_15);
+			}
+		}
+		break;
+		case FRMAE_640x128:
+		{
+			if (interval == INTERVAL_682)
+			{
+				sensor_configure_mode(&sensor_config.mode_640x128_682);
+			}
+		}
+		break;
+		case FRMAE_640x80:
+		{
+			if (interval == INTERVAL_1000)
+			{
+				sensor_configure_mode(&sensor_config.mode_640x80_1000);
+			}
+		}
+		break;
+		default:
+		{
+
+		}
+	}
+}
 void sensor_configure_mode(imgsensor_mode_t * mode)
 {
 	set_mirror_flip(mode->mirror);
@@ -359,6 +433,7 @@ void sensor_configure_mode(imgsensor_mode_t * mode)
 
 	sensor_i2c_write(REG_INTEGRATION_TIME_MSB, GET_WORD_MSB(mode->integration));
 	sensor_i2c_write(REG_INTEGRATION_TIME_LSB, GET_WORD_LSB(mode->integration));
+
 	sensor_i2c_write(REG_ANALOG_GAIN, 	GET_WORD_LSB(mode->gain));
 	sensor_i2c_write(REG_LINE_LEN_MSB, 	GET_WORD_MSB(mode->linelength));
 	sensor_i2c_write(REG_LINE_LEN_LSB, 	GET_WORD_LSB(mode->linelength));

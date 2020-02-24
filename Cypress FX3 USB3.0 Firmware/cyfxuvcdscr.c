@@ -503,16 +503,16 @@ const uint8_t CyFxUSBHSConfigDscr[] =
         0x1E,                           /* Descriptor size */
         0x24,                           /* Descriptor type*/
         0x05,                           /* Subtype: uncompressed frame I/F */
-        0x01,                           /* Frame Descriptor Index */
-        0x01,                           /* Still image capture method 1 supported */
-        0x80,0x02,                      /* Width in pixel: 640-QVGA */
-        0xE0,0x01,                      /* Height in pixel 480-QVGA */
-        0x00,0x50,0x97,0x31,            /* Min bit rate bits/s. Not specified, taken from MJPEG */
-        0x00,0x50,0x97,0x31,            /* Max bit rate bits/s. Not specified, taken from MJPEG */
-        0x00,0x60,0x09,0x00,            /* Maximum video or still frame size in bytes(Deprecated) */
-        0x2A,0x2C,0x0A,0x00,            /* Default Frame Interval */
+        FRAME_640x480,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_640),                  /* Width in pixel: 640*/
+        WBVAL(UVC_HEIGHT_480),                 /* Height in pixel 480*/
+        DBVAL(MIN_BIT_RATE_640x480),           /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_640x480),           /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_640x480),         /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_30),            /* Default Frame Interval */
         0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
-        0x2A,0x2C,0x0A,0x00,            /* Shortest Frame Interval */
+        DBVAL(INTERVAL_30),            /* Shortest Frame Interval */
 
         /* Endpoint Descriptor for BULK Streaming Video Data */
         0x07,                           /* Descriptor size */
@@ -598,18 +598,18 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         0x09,                           /* Descriptor Size */
         CY_U3P_USB_CONFIG_DESCR,        /* Configuration Descriptor Type */
 #ifdef USB_DEBUG_INTERFACE
-#ifdef FX3_UVC_1_0_SUPPORT
-        0xFC,0x00,                      /* Total length of this and all sub-descriptors. */
+	#ifdef FX3_UVC_1_0_SUPPORT
+			0xFC,0x00,                      /* Total length of this and all sub-descriptors. */
+	#else
+			0xFD,0x00,                      /* Total length of this and all sub-descriptors. */
+	#endif
+			0x03,                           /* Number of interfaces */
 #else
-        0xFD,0x00,                      /* Total length of this and all sub-descriptors. */
-#endif
-        0x03,                           /* Number of interfaces */
-#else
-#ifdef FX3_UVC_1_0_SUPPORT
-        0xD9,0x00,                      /* Length of this descriptor and all sub descriptors */
-#else
-        0xDA,0x00,                      /* Length of this descriptor and all sub descriptors */
-#endif
+	#ifdef FX3_UVC_1_0_SUPPORT
+			0xD9,0x00,                      /* Length of this descriptor and all sub descriptors */
+	#else
+			0x80,0x01,                      /* Length of this descriptor and all sub descriptors */
+	#endif
         0x02,                           /* Number of interfaces */
 #endif
         0x01,                           /* Configuration number */
@@ -810,9 +810,9 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         0x24,                           /* Class-specific VS I/f Type */
         0x01,                           /* Descriptotor Subtype : Input Header */
         0x01,                           /* 1 format desciptor follows */
-        0x47,0x00,                      /* Total size of Class specific VS descr */
+        0xED,0x00,                      /* Total size of Class specific VS descr */
         CY_FX_EP_BULK_VIDEO,            /* EP address for BULK video data */
-        0x00,                           /* No dynamic format change supported */
+        0x00,                           /* No dynamic format change supported , Hardware button on Camera?*/
         0x04,                           /* Output terminal ID : 4 */
         0x01,                           /* Still image capture method 1 supported */
         0x00,                           /* Hardware trigger NOT supported */
@@ -825,7 +825,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         0x24,                           /* Class-specific VS I/f Type */
         0x04,                           /* Subtype : uncompressed format I/F */
         0x01,                           /* Format desciptor index */
-        0x01,                           /* Number of frame descriptor followed */
+        0x06,                           /* Number of frame descriptor followed */
         0x59,0x55,0x59,0x32,            /* GUID used to identify streaming-encoding format: YUY2  */
         0x00,0x00,0x10,0x00,
         0x80,0x00,0x00,0xAA,
@@ -838,19 +838,93 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         0x00,                           /* duplication of the video stream restriction: 0 - no restriction */
 
         /* Class specific Uncompressed VS frame descriptor */
+        0x22,                           /* Descriptor size */
+        0x24,                           /* Descriptor type*/
+        0x05,                           /* Subtype: uncompressed frame I/F */
+        FRAME_640x480,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_640),                  /* Width in pixel: 640*/
+        WBVAL(UVC_HEIGHT_480),                 /* Height in pixel 480*/
+        DBVAL(MIN_BIT_RATE_640x480),           /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_640x480),           /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_640x480),         /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_30),            /* Default Frame Interval */
+        0x02,                          		   /* Frame interval(Frame Rate) types: Only two frame interval supported */
+        DBVAL(INTERVAL_200),           /* Frame Interval 200 */
+        DBVAL(INTERVAL_30),            /* Frame Interval 30 */
+
+        0x26,                           /* Descriptor size */
+        0x24,                           /* Descriptor type*/
+        0x05,                           /* Subtype: uncompressed frame I/F */
+        FRAME_1280x720,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_1280),                      /* Width in pixel: 1280 */
+        WBVAL(UVC_HEIGHT_720),                      /* Height in pixel 720 HD */
+        DBVAL(MIN_BIT_RATE_1280x720),            /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_1280x720),            /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_1280x720),            /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_30),            /* Default Frame Interval */
+        0x03,                           /* Frame interval(Frame Rate) types: Three frame interval supported */
+        DBVAL(INTERVAL_120),            /*  Frame Interval 120 FPS */
+        DBVAL(INTERVAL_60),            /*  Frame Interval 60 FPS */
+        DBVAL(INTERVAL_30),            /*  Frame Interval 30 FPS*/
+
+        0x22,                           /* Descriptor size */
+        0x24,                           /* Descriptor type*/
+        0x05,                           /* Subtype: uncompressed frame I/F */
+        FRAME_1920x1080,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_1920),                      /* Width in pixel: 1920 */
+        WBVAL(UVC_HEIGHT_1080),                      /* Height in pixel 1080 HD */
+        DBVAL(MIN_BIT_RATE_1920x1080),            /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_1920x1080),            /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_1920x1080),            /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_30),            /* Default Frame Interval */
+        0x02,                           /* Frame interval(Frame Rate) types: Only two frame interval supported */
+        DBVAL(INTERVAL_60),            /* Frame Interval 60FPS*/
+        DBVAL(INTERVAL_30),            /* Frame Interval 30FPS*/
+
         0x1E,                           /* Descriptor size */
         0x24,                           /* Descriptor type*/
         0x05,                           /* Subtype: uncompressed frame I/F */
-        0x01,                           /* Frame Descriptor Index */
-        0x02,                           /* Still image capture method 1 supported */
-        WBVAL(UVC_WIDTH),                      /* Width in pixel: 160-QVGA */
-        WBVAL(UVC_HEIGHT),                      /* Height in pixel 120-QVGA */
-        DBVAL(MIN_BIT_RATE),            /* Min bit rate bits/s. Not specified, taken from MJPEG */
-        DBVAL(MAX_BIT_RATE),            /* Max bit rate bits/s. Not specified, taken from MJPEG */
-        DBVAL(MAX_FRAME_SIZE),            /* Maximum video or still frame size in bytes(Deprecated) */
-        DBVAL(INTERVAL),            /* Default Frame Interval */
+        FRAME_3280x2462,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_3280),                      /* Width in pixel: 3280 */
+        WBVAL(UVC_HEIGHT_2462),                      /* Height in pixel 2464 HD */
+        DBVAL(MIN_BIT_RATE_3280x2462),            /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_3280x2462),            /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_3280x2462),            /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_15),            /* Default Frame Interval */
         0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
-        DBVAL(INTERVAL),            /* Shortest Frame Interval */
+        DBVAL(INTERVAL_15),            /* Shortest Frame Interval */
+
+        0x1E,                           /* Descriptor size */
+        0x24,                           /* Descriptor type*/
+        0x05,                           /* Subtype: uncompressed frame I/F */
+        FRMAE_640x128,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_640),                      /* Width in pixel: 640 */
+        WBVAL(UVC_HEIGHT_126),                      /* Height in pixel 126 */
+        DBVAL(MIN_BIT_RATE_640x126),            /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_640x126),            /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_640x126),            /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_682),            /* Default Frame Interval */
+        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
+        DBVAL(INTERVAL_682),            /* Shortest Frame Interval */
+
+        0x1E,                           /* Descriptor size */
+        0x24,                           /* Descriptor type*/
+        0x05,                           /* Subtype: uncompressed frame I/F */
+        FRMAE_640x80,                           /* Frame Descriptor Index */
+        0x00,                           /* Still image capture method 1 supported */
+        WBVAL(UVC_WIDTH_640),                      /* Width in pixel: 640 */
+        WBVAL(UVC_HEIGHT_78),                      /* Height in pixel 126 */
+        DBVAL(MIN_BIT_RATE_640x78),            /* Min bit rate bits/s. */
+        DBVAL(MAX_BIT_RATE_640x78),            /* Max bit rate bits/s. */
+        DBVAL(MAX_FRAME_SIZE_640x78),            /* Maximum video or still frame size in bytes(Deprecated) */
+        DBVAL(INTERVAL_1000),            /* Default Frame Interval */
+        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
+        DBVAL(INTERVAL_1000),            /* Shortest Frame Interval */
 
         /* Endpoint Descriptor for BULK Streaming Video Data */
         0x07,                           /* Descriptor size */

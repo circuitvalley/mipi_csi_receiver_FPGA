@@ -138,14 +138,16 @@ typedef struct image_sensor_config_s {
 	imgsensor_mode_t mode_640x480_30;		//640x480 30fps
 	imgsensor_mode_t mode_1280x720_30;		//1280x720 30fps
 	imgsensor_mode_t mode_1280x720_60;		//1280x720 60fps
+	imgsensor_mode_t mode_1280x720_120;		//1280x720 120fps
 	imgsensor_mode_t mode_1920x1080_30;		//1920x1080 30fps
-	imgsensor_mode_t mode_1920x1080_60;	//1920x1080 60fps
-	imgsensor_mode_t mode_1280x720_120;	//1280x720 180fps
+	imgsensor_mode_t mode_1920x1080_60;		//1920x1080 60fps
 	imgsensor_mode_t mode_640x480_200;
 	imgsensor_mode_t mode_640x128_682;
 	imgsensor_mode_t mode_640x80_1000;
 	imgsensor_mode_t mode_3280x2464_15;
 } image_sensor_config_t;
+
+
 
 
 typedef struct imx219_reg_s {
@@ -163,5 +165,7 @@ uint8_t sensor_get_contrast (void);
 void sensor_set_contrast (uint8_t input);
 uint8_t sensor_get_gain (void);
 void sensor_set_gain (uint8_t input);
+void sensor_configure_mode(imgsensor_mode_t * mode);
+void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval);
 
 #endif 

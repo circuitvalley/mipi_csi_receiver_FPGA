@@ -80,7 +80,7 @@ uint8_t glProbeCtrl[CY_FX_UVC_MAX_PROBE_SETTING] = {
     0x00, 0x00,                 /* bmHint : no hit */
     0x01,                       /* Use 1st Video format index */
     0x01,                       /* Use 1st Video frame index */
-    DBVAL(INTERVAL),     /* Desired frame interval in the unit of 100ns: 30 fps */
+    DBVAL(INTERVAL_30),     /* Desired frame interval in the unit of 100ns: 30 fps */
     0x00, 0x00,                 /* Key frame rate in key frame/video frame units: only applicable
                                    to video streaming with adjustable compression parameters */
     0x00, 0x00,                 /* PFrame rate in PFrame / key frame units: only applicable to
@@ -91,7 +91,7 @@ uint8_t glProbeCtrl[CY_FX_UVC_MAX_PROBE_SETTING] = {
                                    streaming with adjustable compression parameters */
     0x00, 0x00,                 /* Internal video streaming i/f latency in ms */
     DBVAL(MAX_FRAME_SIZE),     /* Max video frame size in bytes */
-    0x00, 0x80, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 16 KB */
+    0x00, 0x80, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 32 KB */
 
 #ifndef FX3_UVC_1_0_SUPPORT
     /* UVC 1.1 Probe Control has additional fields from UVC 1.0 */
@@ -103,12 +103,35 @@ uint8_t glProbeCtrl[CY_FX_UVC_MAX_PROBE_SETTING] = {
 #endif
 };
 
+typedef struct __attribute__((packed)) uvc_control_s
+{
+	uint16_t hint;
+	uint8_t format_index;
+	uint8_t frame_index;
+	uint32_t frame_interval;
+	uint16_t key_frame_rate;
+	uint16_t PFrame_rate;
+	uint16_t comp_quality;
+	uint16_t comp_win_size;
+	uint16_t delay;
+	uint32_t max_video_frame_size;
+	uint32_t max_payload_transfer_size;
+#ifndef FX3_UVC_1_0_SUPPORT
+	uint32_t device_clock;
+	uint8_t	frame_info;
+	uint8_t prefered_version;
+	uint8_t min_version;
+	uint8_t max_version;
+#endif
+	uint8_t align_16[14];
+}uvc_control_t;
+
 /* UVC Probe Control Setting for a USB 2.0 connection. */
 uint8_t glProbeCtrl20[CY_FX_UVC_MAX_PROBE_SETTING] = {
     0x00, 0x00,                 /* bmHint : no hit */
     0x01,                       /* Use 1st Video format index */
     0x01,                       /* Use 1st Video frame index */
-    0x2A, 0x2C, 0x0A, 0x00,     /* Desired frame interval in the unit of 100ns: 15 fps */
+    DBVAL(INTERVAL_30),    /* Desired frame interval in the unit of 100ns: 15 fps */
     0x00, 0x00,                 /* Key frame rate in key frame/video frame units: only applicable
                                    to video streaming with adjustable compression parameters */
     0x00, 0x00,                 /* PFrame rate in PFrame / key frame units: only applicable to
@@ -118,8 +141,8 @@ uint8_t glProbeCtrl20[CY_FX_UVC_MAX_PROBE_SETTING] = {
     0x00, 0x00,                 /* Window size for average bit rate: only applicable to video
                                    streaming with adjustable compression parameters */
     0x00, 0x00,                 /* Internal video streaming i/f latency in ms */
-    0x00, 0x60, 0x09, 0x00,     /* Max video frame size in bytes */
-    0x00, 0x80, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 16 KB */
+    DBVAL(MAX_FRAME_SIZE),     /* Max video frame size in bytes */
+    0x00, 0x80, 0x00, 0x00,      /* No. of bytes device can rx in single payload = 32 KB */
 
 #ifndef FX3_UVC_1_0_SUPPORT
     /* UVC 1.1 Probe Control has additional fields from UVC 1.0 */
@@ -293,8 +316,7 @@ CyFxUVCApplnUSBSetupCB (
                 case CY_FX_UVC_CONTROL_INTERFACE:
                     {
                         uvcHandleReq = CyTrue;
-                        status = CyU3PEventSet (&glFxUVCEvent, CY_FX_UVC_VIDEO_CONTROL_REQUEST_EVENT,
-                                CYU3P_EVENT_OR);
+                        status = CyU3PEventSet (&glFxUVCEvent, CY_FX_UVC_VIDEO_CONTROL_REQUEST_EVENT, CYU3P_EVENT_OR);
                         if (status != CY_U3P_SUCCESS)
                         {
                             CyU3PDebugPrint (4, "Set CY_FX_UVC_VIDEO_CONTROL_REQUEST_EVENT Failed %x\r\n", status);
@@ -306,8 +328,7 @@ CyFxUVCApplnUSBSetupCB (
                 case CY_FX_UVC_STREAM_INTERFACE:
                     {
                         uvcHandleReq = CyTrue;
-                        status = CyU3PEventSet (&glFxUVCEvent, CY_FX_UVC_VIDEO_STREAM_REQUEST_EVENT,
-                                CYU3P_EVENT_OR);
+                        status = CyU3PEventSet (&glFxUVCEvent, CY_FX_UVC_VIDEO_STREAM_REQUEST_EVENT, CYU3P_EVENT_OR);
                         if (status != CY_U3P_SUCCESS)
                         {
                             /* Error handling */
@@ -1327,7 +1348,7 @@ UVCHandleProcessingUnitRqts (
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_DEF_REQ: /* Default brightness value = 55. */
-        		glEp0Buffer[0] = 0xd0;
+        		glEp0Buffer[0] = 18;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_SET_CUR_REQ: /* Update brightness value. */
@@ -1379,7 +1400,7 @@ UVCHandleProcessingUnitRqts (
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_DEF_REQ: /* Default brightness value = 55. */
-        		glEp0Buffer[0] = 55;
+        		glEp0Buffer[0] = 128;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_SET_CUR_REQ: /* Update brightness value. */
@@ -1669,9 +1690,7 @@ UVCHandleExtensionUnitRqts (
 /*
  * Handler for the video streaming control requests.
  */
-static void
-UVCHandleVideoStreamingRqts (
-        void)
+static void UVCHandleVideoStreamingRqts (void)
 {
     CyU3PReturnStatus_t apiRetStatus = CY_U3P_SUCCESS;
     uint16_t readCount;
@@ -1703,10 +1722,10 @@ UVCHandleVideoStreamingRqts (
                     }
                     break;
                 case CY_FX_USB_UVC_SET_CUR_REQ:
-                    apiRetStatus = CyU3PUsbGetEP0Data (CY_FX_UVC_MAX_PROBE_SETTING_ALIGNED,
-                            glCommitCtrl, &readCount);
+                    apiRetStatus = CyU3PUsbGetEP0Data (CY_FX_UVC_MAX_PROBE_SETTING_ALIGNED, glCommitCtrl, &readCount);
                     if (apiRetStatus == CY_U3P_SUCCESS)
                     {
+
                         /* Copy the relevant settings from the host provided data into the
                            active data structure. */
                         glProbeCtrl[2] = glCommitCtrl[2];
@@ -1748,29 +1767,18 @@ UVCHandleVideoStreamingRqts (
                     /* The host has selected the parameters for the video stream. Check the desired
                        resolution settings, configure the sensor and start the video stream.
                        */
-                    apiRetStatus = CyU3PUsbGetEP0Data (CY_FX_UVC_MAX_PROBE_SETTING_ALIGNED,
-                            glCommitCtrl, &readCount);
+                    apiRetStatus = CyU3PUsbGetEP0Data (CY_FX_UVC_MAX_PROBE_SETTING_ALIGNED, glCommitCtrl, &readCount);
                     if (apiRetStatus == CY_U3P_SUCCESS)
                     {
-                        if (usbSpeed == CY_U3P_SUPER_SPEED)
-                        {
-                        	//TODO : Change Video Setting here
-                           // SensorScaling_HD720p_30fps ();
-#ifdef FRAME_TIMER_ENABLE
-                            /* We are using frame timer value of 200ms as the frame time is 33ms.
-                             * Having more margin so that DMA reset doen't happen every now and then */
-                            glFrameTimerPeriod = CY_FX_UVC_FRAME_TIMER_VAL_400MS;
-#endif
-                        }
-                        else
-                        {
-                           // SensorScaling_VGA ();
-#ifdef FRAME_TIMER_ENABLE
-                            /* We are using frame timer value of 400ms as the frame time is 66ms.
-                             * Having more margin so that DMA reset doen't happen every now and then */
-                            glFrameTimerPeriod = CY_FX_UVC_FRAME_TIMER_VAL_400MS;
-#endif
-                        }
+                    	uvc_control_t *uvc_control = (uvc_control_t *)glCommitCtrl;
+
+                        sensor_handle_uvc_control(uvc_control->frame_index, uvc_control->frame_interval);
+
+                        #ifdef FRAME_TIMER_ENABLE
+                        	/* We are using frame timer value of 400ms as the frame time is upto 66ms.
+ 	 	 	 	 	 	 	 * Having more margin so that DMA reset doen't happen every now and then */
+                        	glFrameTimerPeriod = CY_FX_UVC_FRAME_TIMER_VAL_400MS;
+						#endif
 
                         /* We can start streaming video now. */
                         apiRetStatus = CyU3PEventSet (&glFxUVCEvent, CY_FX_UVC_STREAM_EVENT, CYU3P_EVENT_OR);

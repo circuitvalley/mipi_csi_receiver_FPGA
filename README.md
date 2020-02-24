@@ -1,6 +1,6 @@
 # MIPI CSI-2 Receiver on FPGA
 
-This Repo contains hardware, Verilog source and USB3.0 Controller C source for generic FPGA CSI receiver. No FPGA hardware specific components has been used so can be easily ported to any low cost FPGA. 
+This Repo contains hardware, Verilog source and USB3.0 USB video device class (UVC) Controller C source for generic FPGA CSI receiver. No FPGA hardware specific components has been used so can be easily ported to any low cost FPGA. 
 
 USB firmware side of the project is still work in progress for higher framerate. 
 

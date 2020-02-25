@@ -18,7 +18,7 @@ Test Has been done at</br>
 640x128   682FPS</br>
 640x80    1000FPS</br>
 
-TODO: Improvements need to be done at FPGA side to implement auto exposure and Brightness and whilte Balance correction. 
+TODO: Improvements need to be done at FPGA side to implement auto exposure, Brightness and whilte Balance correction. 
 
 MIPI CSI-2 Receiver on Lattice FPGA (c) by Gaurav Singh www.CircuitValley.com
 MIPI CSI-2 Receiver on Lattice FPGA is licensed under a

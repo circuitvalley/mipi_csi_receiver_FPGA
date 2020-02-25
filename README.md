@@ -4,7 +4,7 @@ This Repo contains hardware, Verilog source and USB3.0 USB video device class (U
 
 Supports Frame Rate from 15 to 1000 FPS , Resolution From 640x80 to Full 8M 3280x2464.<br>
 Max data rate ~2Gbps at 1080p 60FPS. <br>
-Manual Exposure and manual Brightness control for now. Manual exposure is mapped to UVC saturation Control. Test Pattern can also be enabled with mapped gamma control. 
+Full control of Frame rate and Resolution over UVC control. Manual Exposure and manual Brightness control for now. Manual exposure is mapped to UVC saturation Control. Test Pattern can also be enabled with mapped gamma control. 
 
 Test Has been done at</br>
 3280x2464 15FPS</br>

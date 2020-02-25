@@ -702,7 +702,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
                                          * D22 – D23: Reserved, set to zero
                                          */
 #ifdef UVC_PTZ_SUPPORT
-        0x00,0x0A,0x00,                 /* bmControls field of camera terminal: PTZ supported */
+        0x08,0x00,0x00,                 /* bmControls field of camera terminal: PTZ supported only Exposure */
 #else
         0x00,0x00,0x00,                 /* bmControls field of camera terminal: No controls supported */
 #endif
@@ -719,7 +719,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         0x01,                           /* Source ID : 1 : Connected to input terminal */
         0x00,0x40,                      /* Digital multiplier */
         0x03,                           /* Size of controls field for this terminal : 3 bytes */
-        0x03,0x02,0x00,                 /* bmControls field of processing unit: Brightness control supported */
+        0x29,0x00,0x00,                 /* bmControls field of processing unit: Brightness, Gamma is used as test pattern*/
         0x00,                           /* String desc index : Not used */
 #ifndef FX3_UVC_1_0_SUPPORT
         0x00,                           /* Analog Video Standards Supported: None */
@@ -841,7 +841,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         0x22,                           /* Descriptor size */
         0x24,                           /* Descriptor type*/
         0x05,                           /* Subtype: uncompressed frame I/F */
-        FRAME_640x480,                           /* Frame Descriptor Index */
+        FRAME_640x480,                  /* Frame Descriptor Index */
         0x00,                           /* Still image capture method 1 supported */
         WBVAL(UVC_WIDTH_640),                  /* Width in pixel: 640*/
         WBVAL(UVC_HEIGHT_480),                 /* Height in pixel 480*/
@@ -849,7 +849,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         DBVAL(MAX_BIT_RATE_640x480),           /* Max bit rate bits/s. */
         DBVAL(MAX_FRAME_SIZE_640x480),         /* Maximum video or still frame size in bytes(Deprecated) */
         DBVAL(INTERVAL_30),            /* Default Frame Interval */
-        0x02,                          		   /* Frame interval(Frame Rate) types: Only two frame interval supported */
+        0x02,                          /* Frame interval(Frame Rate) types: Only two frame interval supported for this resolution*/
         DBVAL(INTERVAL_200),           /* Frame Interval 200 */
         DBVAL(INTERVAL_30),            /* Frame Interval 30 */
 
@@ -864,7 +864,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         DBVAL(MAX_BIT_RATE_1280x720),            /* Max bit rate bits/s. */
         DBVAL(MAX_FRAME_SIZE_1280x720),            /* Maximum video or still frame size in bytes(Deprecated) */
         DBVAL(INTERVAL_30),            /* Default Frame Interval */
-        0x03,                           /* Frame interval(Frame Rate) types: Three frame interval supported */
+        0x03,                           /* Frame interval(Frame Rate) types: Three frame interval supported for this resolution*/
         DBVAL(INTERVAL_120),            /*  Frame Interval 120 FPS */
         DBVAL(INTERVAL_60),            /*  Frame Interval 60 FPS */
         DBVAL(INTERVAL_30),            /*  Frame Interval 30 FPS*/
@@ -880,7 +880,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         DBVAL(MAX_BIT_RATE_1920x1080),            /* Max bit rate bits/s. */
         DBVAL(MAX_FRAME_SIZE_1920x1080),            /* Maximum video or still frame size in bytes(Deprecated) */
         DBVAL(INTERVAL_30),            /* Default Frame Interval */
-        0x02,                           /* Frame interval(Frame Rate) types: Only two frame interval supported */
+        0x02,                           /* Frame interval(Frame Rate) types: Only two frame interval supported for this resolution*/
         DBVAL(INTERVAL_60),            /* Frame Interval 60FPS*/
         DBVAL(INTERVAL_30),            /* Frame Interval 30FPS*/
 
@@ -895,7 +895,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         DBVAL(MAX_BIT_RATE_3280x2462),            /* Max bit rate bits/s. */
         DBVAL(MAX_FRAME_SIZE_3280x2462),            /* Maximum video or still frame size in bytes(Deprecated) */
         DBVAL(INTERVAL_15),            /* Default Frame Interval */
-        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
+        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported for this resolution*/
         DBVAL(INTERVAL_15),            /* Shortest Frame Interval */
 
         0x1E,                           /* Descriptor size */
@@ -909,7 +909,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         DBVAL(MAX_BIT_RATE_640x126),            /* Max bit rate bits/s. */
         DBVAL(MAX_FRAME_SIZE_640x126),            /* Maximum video or still frame size in bytes(Deprecated) */
         DBVAL(INTERVAL_682),            /* Default Frame Interval */
-        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
+        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported for this resolution*/
         DBVAL(INTERVAL_682),            /* Shortest Frame Interval */
 
         0x1E,                           /* Descriptor size */
@@ -923,7 +923,7 @@ const uint8_t CyFxUSBSSConfigDscr[] =
         DBVAL(MAX_BIT_RATE_640x78),            /* Max bit rate bits/s. */
         DBVAL(MAX_FRAME_SIZE_640x78),            /* Maximum video or still frame size in bytes(Deprecated) */
         DBVAL(INTERVAL_1000),            /* Default Frame Interval */
-        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported */
+        0x01,                           /* Frame interval(Frame Rate) types: Only one frame interval supported for this resolution*/
         DBVAL(INTERVAL_1000),            /* Shortest Frame Interval */
 
         /* Endpoint Descriptor for BULK Streaming Video Data */

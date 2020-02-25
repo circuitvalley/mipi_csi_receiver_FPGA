@@ -161,10 +161,13 @@ void SensorReset (void);
 uint8_t SensorI2cBusTest (void);
 uint8_t SensorGetBrightness (void);
 void SensorSetBrightness (uint8_t input);
-uint8_t sensor_get_contrast (void);
-void sensor_set_contrast (uint8_t input);
-uint8_t sensor_get_gain (void);
-void sensor_set_gain (uint8_t input);
+uint16_t sensor_get_exposure (void);
+uint16_t sensor_get_max_exposure();
+uint16_t sensor_get_min_exposure();
+uint16_t sensor_get_def_exposure();
+void sensor_set_exposure (uint16_t input);
+uint8_t sensor_get_test_pattern (void);
+void sensor_set_test_pattern (uint8_t input);
 void sensor_configure_mode(imgsensor_mode_t * mode);
 void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval);
 

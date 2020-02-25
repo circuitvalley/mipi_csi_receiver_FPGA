@@ -1265,8 +1265,7 @@ UVCHandleProcessingUnitRqts (
 {
     CyU3PReturnStatus_t apiRetStatus = CY_U3P_SUCCESS;
     uint16_t readCount, brightnessVal;
-    uint16_t contrast_val, gain_val;
-
+    uint16_t exposure_val, gain_val;
     switch (wValue)
     {
         case CY_FX_UVC_PU_BRIGHTNESS_CONTROL:
@@ -1274,30 +1273,37 @@ UVCHandleProcessingUnitRqts (
             {
                 case CY_FX_USB_UVC_GET_LEN_REQ: /* Length of brightness data = 2 byte. */
                     glEp0Buffer[0] = 2;
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_CUR_REQ: /* Current brightness value. */
                     glEp0Buffer[0] = SensorGetBrightness ();
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_MIN_REQ: /* Minimum brightness = 0. */
                     glEp0Buffer[0] = 0;
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum brightness = 255. */
                     glEp0Buffer[0] = 255;
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_RES_REQ: /* Resolution = 1. */
                     glEp0Buffer[0] = 1;
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_INFO_REQ: /* Both GET and SET requests are supported, auto modes not supported */
                     glEp0Buffer[0] = 3;
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_DEF_REQ: /* Default brightness value = 55. */
                     glEp0Buffer[0] = 55;
+                    glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_SET_CUR_REQ: /* Update brightness value. */
@@ -1319,8 +1325,9 @@ UVCHandleProcessingUnitRqts (
                     break;
             }
             break;
-        case CY_FX_UVC_PU_CONTRAST_CONTROL:
+        case CY_FX_UVC_PU_SATURATION_CONTROL:
         {
+
         	switch (bRequest)
         	{
         	case CY_FX_USB_UVC_GET_LEN_REQ: /* Length of brightness data = 2 byte. */
@@ -1328,27 +1335,35 @@ UVCHandleProcessingUnitRqts (
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_CUR_REQ: /* Current brightness value. */
-        		glEp0Buffer[0] = sensor_get_contrast ();
+        		exposure_val = sensor_get_exposure ();
+        		glEp0Buffer[0] = exposure_val & 0xFF;
+        		glEp0Buffer[1] = (exposure_val>>8) & 0xFF;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_MIN_REQ: /* Minimum brightness = 0. */
         		glEp0Buffer[0] = 0;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum brightness = 255. */
-        		glEp0Buffer[0] = 255;
+        		exposure_val = sensor_get_max_exposure ();
+        		glEp0Buffer[0] = exposure_val & 0xFF;
+        		glEp0Buffer[1] = (exposure_val>>8) & 0xFF;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_RES_REQ: /* Resolution = 1. */
         		glEp0Buffer[0] = 1;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_INFO_REQ: /* Both GET and SET requests are supported, auto modes not supported */
         		glEp0Buffer[0] = 3;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
-        	case CY_FX_USB_UVC_GET_DEF_REQ: /* Default brightness value = 55. */
-        		glEp0Buffer[0] = 18;
+        	case CY_FX_USB_UVC_GET_DEF_REQ: /* Default brightness */
+        		exposure_val = sensor_get_def_exposure ();
+        		glEp0Buffer[0] = exposure_val & 0xFF;
+        		glEp0Buffer[1] = (exposure_val>>8) & 0xFF;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_SET_CUR_REQ: /* Update brightness value. */
@@ -1356,12 +1371,9 @@ UVCHandleProcessingUnitRqts (
         				glEp0Buffer, &readCount);
         		if (apiRetStatus == CY_U3P_SUCCESS)
         		{
-        			contrast_val = CY_U3P_MAKEWORD(glEp0Buffer[1], glEp0Buffer[0]);
-        			/* Update the Contrast value only if the value is within the range */
-        			if(contrast_val >= 0 && contrast_val <= 255)
-        			{
-        				sensor_set_contrast (glEp0Buffer[0]);
-        			}
+        			exposure_val = CY_U3P_MAKEWORD(glEp0Buffer[1], glEp0Buffer[0]);
+
+       				sensor_set_exposure (exposure_val);
         		}
         		break;
         	default:
@@ -1371,48 +1383,55 @@ UVCHandleProcessingUnitRqts (
         	}
         	break;
         }
-        case CY_FX_UVC_PU_GAIN_CONTROL:
+        case  CY_FX_UVC_PU_GAMMA_CONTROL: //used as test Pattern
         {
         	switch (bRequest)
         	{
-        	case CY_FX_USB_UVC_GET_LEN_REQ: /* Length of brightness data = 2 byte. */
+        	case CY_FX_USB_UVC_GET_LEN_REQ: /* Length of TestPattern  data = 2 byte. */
         		glEp0Buffer[0] = 2;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
-        	case CY_FX_USB_UVC_GET_CUR_REQ: /* Current brightness value. */
-        		glEp0Buffer[0] = sensor_get_gain ();
+        	case CY_FX_USB_UVC_GET_CUR_REQ: /* Current TestPattern  value. */
+        		glEp0Buffer[0] = sensor_get_test_pattern ();
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
-        	case CY_FX_USB_UVC_GET_MIN_REQ: /* Minimum brightness = 0. */
+        	case CY_FX_USB_UVC_GET_MIN_REQ: /* Minimum TestPattern  = 0. */
         		glEp0Buffer[0] = 0;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
-        	case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum brightness = 255. */
-        		glEp0Buffer[0] = 255;
+        	case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum TestPattern  = 8. */
+        		glEp0Buffer[0] = 8;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_RES_REQ: /* Resolution = 1. */
         		glEp0Buffer[0] = 1;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_INFO_REQ: /* Both GET and SET requests are supported, auto modes not supported */
         		glEp0Buffer[0] = 3;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
-        	case CY_FX_USB_UVC_GET_DEF_REQ: /* Default brightness value = 55. */
-        		glEp0Buffer[0] = 128;
+        	case CY_FX_USB_UVC_GET_DEF_REQ: /* Default TestPattern 0 No test pattern */
+        		glEp0Buffer[0] = 0;
+        		glEp0Buffer[1] = 0;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
-        	case CY_FX_USB_UVC_SET_CUR_REQ: /* Update brightness value. */
+        	case CY_FX_USB_UVC_SET_CUR_REQ: /* Update TestPattern  value. */
         		apiRetStatus = CyU3PUsbGetEP0Data (CY_FX_UVC_MAX_PROBE_SETTING_ALIGNED,
         				glEp0Buffer, &readCount);
         		if (apiRetStatus == CY_U3P_SUCCESS)
         		{
         			gain_val = CY_U3P_MAKEWORD(glEp0Buffer[1], glEp0Buffer[0]);
         			/* Update the gain value only if the value is within the range */
-        			if(gain_val >= 0 && gain_val <= 255)
+        			if(gain_val >= 0 && gain_val <= 8)
         			{
-        				sensor_set_gain (glEp0Buffer[0]);
+        				sensor_set_test_pattern (glEp0Buffer[0]);
         			}
         		}
         		break;
@@ -1425,7 +1444,7 @@ UVCHandleProcessingUnitRqts (
         }
         default:
             /*
-             * Only the brightness control is supported as of now. Add additional code here to support
+             * Add additional code here to support
              * other controls.
              */
             glUvcVcErrorCode = CY_FX_UVC_VC_ERROR_CODE_INVALID_CONTROL;

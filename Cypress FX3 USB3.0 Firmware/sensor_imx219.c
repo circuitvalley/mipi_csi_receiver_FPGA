@@ -11,6 +11,9 @@
 #include "sensor_imx219.h"
 #include "uvc_settings.h"
 
+imgsensor_mode_t *selected_img_mode;
+
+
 static const imx219_reg_t mode_default[]={	//default register settings, Resolution and FPS specific settings will be over written
 		 {REG_MODE_SEL,			0x00},
 		 {0x30EB,				0x05},	//access sequence
@@ -93,10 +96,10 @@ static image_sensor_config_t sensor_config = {
 	.mode_640x480_30 = {
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 2400,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
+		.integration = 3402 - 10,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
 		.linelength = 3448, 	//Warning This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
-		.framelength = 2722,
+		.framelength = 3402,
 		.startx = 1320,
 		.starty = 990,
 		.endx = 1960,
@@ -108,7 +111,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_640x480_200 = {
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 0x0100,
+		.integration = 510 - 10,
 		.gain = 0x70,
 		.linelength = 3448,
 		.framelength = 510,
@@ -124,7 +127,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_1280x720_30 = {
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 0x0C00,
+		.integration = 3402 - 10,
 		.gain = 0x80,
 		.linelength = 3448,
 		.framelength = 3402,
@@ -139,7 +142,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_1280x720_60 = {
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 0x0633,
+		.integration = 1701 - 10,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 1701,
@@ -154,7 +157,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_1280x720_120 = {		//Camera output @120
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 0x0200,
+		.integration = 850 - 10,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 850,
@@ -169,7 +172,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_1920x1080_30 = {		//camera output 1920x1080 @30FPS
 		.pix_clk_mul = 0x50,
 		.pix_clk_div = 0x5,
-		.integration = 0x0900,
+		.integration = 2474 - 10,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 2474,
@@ -184,7 +187,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_1920x1080_60 = {		//camera output 1920x1080 @60FPS
 		.pix_clk_mul = 0x50,
 		.pix_clk_div = 0x5,
-		.integration = 0x0400,
+		.integration = 1237 - 10,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 1237,
@@ -230,7 +233,7 @@ static image_sensor_config_t sensor_config = {
 	.mode_3280x2464_15 = {	//full frame 3280x2464 @15FPS
 		.pix_clk_mul = 0x31,
 		.pix_clk_div = 0x5,
-		.integration = 0xB00,
+		.integration = 3031 - 10,
 		.gain = 200,
 		.linelength = 0xD78,
 		.framelength = 3031,
@@ -355,11 +358,11 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_30)
 			{
-				sensor_configure_mode(&sensor_config.mode_640x480_30);
+				selected_img_mode = &sensor_config.mode_640x480_30;
 			}
 			else if(interval == INTERVAL_200)
 			{
-				sensor_configure_mode(&sensor_config.mode_640x480_200);
+				selected_img_mode = &sensor_config.mode_640x480_200;
 			}
 
 		}
@@ -368,15 +371,15 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_30)
 			{
-				sensor_configure_mode(&sensor_config.mode_1280x720_30);
+				selected_img_mode = &sensor_config.mode_1280x720_30;
 			}
 			else if(interval == INTERVAL_60)
 			{
-				sensor_configure_mode(&sensor_config.mode_1280x720_60);
+				selected_img_mode = &sensor_config.mode_1280x720_60;
 			}
 			else if(interval == INTERVAL_120)
 			{
-				sensor_configure_mode(&sensor_config.mode_1280x720_120);
+				selected_img_mode = &sensor_config.mode_1280x720_120;
 			}
 		}
 		break;
@@ -384,11 +387,11 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_30)
 			{
-				sensor_configure_mode(&sensor_config.mode_1920x1080_30);
+				selected_img_mode = &sensor_config.mode_1920x1080_30;
 			}
 			else if(interval == INTERVAL_60)
 			{
-				sensor_configure_mode(&sensor_config.mode_1920x1080_60);
+				selected_img_mode = &sensor_config.mode_1920x1080_60;
 			}
 		}
 		break;
@@ -396,7 +399,7 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_15)
 			{
-				sensor_configure_mode(&sensor_config.mode_3280x2464_15);
+				selected_img_mode = &sensor_config.mode_3280x2464_15;
 			}
 		}
 		break;
@@ -404,7 +407,7 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_682)
 			{
-				sensor_configure_mode(&sensor_config.mode_640x128_682);
+				selected_img_mode = &sensor_config.mode_640x128_682;
 			}
 		}
 		break;
@@ -412,7 +415,7 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_1000)
 			{
-				sensor_configure_mode(&sensor_config.mode_640x80_1000);
+				selected_img_mode = &sensor_config.mode_640x80_1000;
 			}
 		}
 		break;
@@ -421,6 +424,8 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 
 		}
 	}
+
+	sensor_configure_mode (selected_img_mode);
 }
 void sensor_configure_mode(imgsensor_mode_t * mode)
 {
@@ -503,40 +508,59 @@ void SensorInit (void)
 	sensor_configure_mode(&sensor_config.mode_3280x2464_15);
 }
 
-
-
-
-
 uint8_t SensorGetBrightness (void)
 {
-    return 0;
+    return selected_img_mode->gain;
 }
-
 
 void SensorSetBrightness (uint8_t input)
 {
+	selected_img_mode->gain = input;
 	sensor_i2c_write (REG_ANALOG_GAIN, input);
 }
 
-uint8_t sensor_get_contrast (void)
+uint16_t sensor_get_min_exposure (void)
 {
 	return 0;
 }
 
-
-void sensor_set_contrast (uint8_t input)
+uint16_t sensor_get_max_exposure (void)
 {
-
-	sensor_i2c_write (REG_INTEGRATION_TIME_LSB, input);
+	return sensor_config.mode_3280x2464_15.integration;
 }
 
-uint8_t sensor_get_gain (void)
+uint16_t sensor_get_def_exposure (void)
 {
-	return 0;
+	return selected_img_mode->integration;
 }
 
-void sensor_set_gain (uint8_t input)
+uint16_t sensor_get_exposure (void)
 {
+	return selected_img_mode->integration;
+}
 
-	sensor_i2c_write (REG_TEST_PATTERN_LSB, input);
+void sensor_set_exposure (uint16_t integration)
+{
+	if (integration > selected_img_mode->integration)
+	{
+		integration = selected_img_mode->integration;
+	}
+	sensor_i2c_write (REG_INTEGRATION_TIME_MSB, (integration >> 8) & 0xFF);
+	sensor_i2c_write (REG_INTEGRATION_TIME_LSB, integration & 0xFF);
+}
+
+
+uint8_t sensor_get_test_pattern (void)
+{
+	return selected_img_mode->test_pattern;
+}
+
+void sensor_set_test_pattern (uint8_t test_pattern)
+{
+	if (test_pattern > 8)
+	{
+		test_pattern = 0;
+	}
+	selected_img_mode->test_pattern = test_pattern;
+	sensor_i2c_write (REG_TEST_PATTERN_LSB, test_pattern);
 }

@@ -2,9 +2,10 @@
 
 This Repo contains hardware, Verilog source and USB3.0 USB video device class (UVC) Controller C source for generic FPGA CSI receiver. No FPGA hardware specific components has been used so can be easily ported to any low cost FPGA. 
 
-USB firmware side of the project is still work in progress for higher framerate. 
+Supports Frame Rate from 15 to 1000 FPS , Resolution From 640x80 to Full 8M 3280x2464. Max data rate ~2Gbps at 1080p 60FPS. <br>
+Manual Exposure and manual Brightness control for now. Manual exposure is mapped to UVC saturation Control. Test Pattern can also be enabled with mapped gamma control. 
 
-Latest Test Has been done at</br>
+Test Has been done at</br>
 3280x2464 15FPS</br>
 1920x1080 60FPS</br>
 1920x1080 30FPS</br>
@@ -16,6 +17,7 @@ Latest Test Has been done at</br>
 640x128   682FPS</br>
 640x80    1000FPS</br>
 
+TODO: Impovements need to be done at FPGA side to implement auto exposure and Brightness and whilte Balance correction. 
 
 MIPI CSI-2 Receiver on Lattice FPGA (c) by Gaurav Singh www.CircuitValley.com
 MIPI CSI-2 Receiver on Lattice FPGA is licensed under a

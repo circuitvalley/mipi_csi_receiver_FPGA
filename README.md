@@ -62,6 +62,6 @@ https://www.circuitvalley.com/2020/02/imx219-camera-mipi-csi-receiver-fpga-latti
 ## Sensor Image Qaulity Video 
 
 <a href="https://www.youtube.com/watch?v=uRaHXo-Zu90">
-<img src="https://github.com/circuitvalley/mipi_csi_receiver_FPGA/blob/master/Hardware/Lattice%20MachXO3%20USB3%20FX3%20Interface%20Board/Full_frame_imx219_image.png" alt="IMX219" width="480" height="480">
+<img src="https://github.com/circuitvalley/mipi_csi_receiver_FPGA/blob/master/Hardware/Lattice%20MachXO3%20USB3%20FX3%20Interface%20Board/Full_frame_imx219_image.png" alt="IMX219" width="640" height="480">
 </a>
 

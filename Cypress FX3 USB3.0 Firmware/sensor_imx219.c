@@ -94,33 +94,35 @@ static image_sensor_config_t sensor_config = {
 	.sensor_mode = 0x01,
 
 	.mode_640x480_30 = {
-		.pix_clk_mul = 0x58,
+		.pix_clk_mul = 0x53,
 		.pix_clk_div = 0x4,
-		.integration = 3402 - 10,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
+		.integration = 3209 - 4,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
-		.linelength = 3448, 	//Warning This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
-		.framelength = 3402,
-		.startx = 1320,
-		.starty = 990,
-		.endx = 1960,
-		.endy = 1481,
+		.linelength = 3448, 	//Warning! This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
+		.framelength = 3209,
+		.startx = 1000,
+		.starty = 750,
+		.endx = 2280,
+		.endy = 1715,		//this has to odd or bayer oder will change
 		.width = 640,
 		.height = 482,	//each frame will have two extra line to compensate for debayer crop
+		.binning = 2,
 		.test_pattern = 0
 	},
 	.mode_640x480_200 = {
-		.pix_clk_mul = 0x58,
+		.pix_clk_mul = 0x53,
 		.pix_clk_div = 0x4,
-		.integration = 510 - 10,
+		.integration = 481 - 4,
 		.gain = 0x70,
 		.linelength = 3448,
-		.framelength = 510,
-		.startx = 1320,
-		.starty = 990,
-		.endx = 1960,
-		.endy = 1481,
+		.framelength = 481,
+		.startx = 1000,
+		.starty = 750,
+		.endx = 2280,
+		.endy = 1715,
 		.width = 640,
 		.height = 482,
+		.binning = 2,
 		.test_pattern = 0
 	},
 
@@ -137,12 +139,13 @@ static image_sensor_config_t sensor_config = {
 		.endy = 0x6EB,
 		.width = 1280,
 		.height = 722,
+		.binning = 0,
 		.test_pattern = 0
 	},
 	.mode_1280x720_60 = {
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 1701 - 10,
+		.integration = 1701 - 4,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 1701,
@@ -152,12 +155,13 @@ static image_sensor_config_t sensor_config = {
 		.endy = 0x6EB,
 		.width = 1280,
 		.height = 722,
+		.binning = 0,
 		.test_pattern = 0
 	},
 	.mode_1280x720_120 = {		//Camera output @120
 		.pix_clk_mul = 0x58,
 		.pix_clk_div = 0x4,
-		.integration = 850 - 10,
+		.integration = 850 - 4,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 850,
@@ -167,12 +171,13 @@ static image_sensor_config_t sensor_config = {
 		.endy = 0x6EB,
 		.width = 1280,
 		.height = 722,
+		.binning = 0,
 		.test_pattern = 0
 	},
 	.mode_1920x1080_30 = {		//camera output 1920x1080 @30FPS
 		.pix_clk_mul = 0x50,
 		.pix_clk_div = 0x5,
-		.integration = 2474 - 10,
+		.integration = 2474 - 4,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 2474,
@@ -182,12 +187,13 @@ static image_sensor_config_t sensor_config = {
 		.endy = 0x6EB,
 		.width = 1920,
 		.height = 1082,
+		.binning = 0,
 		.test_pattern = 0
 	},
 	.mode_1920x1080_60 = {		//camera output 1920x1080 @60FPS
 		.pix_clk_mul = 0x50,
 		.pix_clk_div = 0x5,
-		.integration = 1237 - 10,
+		.integration = 1237 - 4,
 		.gain = 0x80,
 		.linelength = 0xD78,
 		.framelength = 1237,
@@ -197,43 +203,46 @@ static image_sensor_config_t sensor_config = {
 		.endy = 0x6EB,
 		.width = 1920,
 		.height = 1082,
+		.binning = 0,
 		.test_pattern = 0
 	},
 	.mode_640x128_682 = {	//camera output 640x128 pixel @682 FPS
-		.pix_clk_mul = 0x58,
+		.pix_clk_mul = 0x53,
 		.pix_clk_div = 0x4,
-		.integration = 140,
+		.integration = 141 - 4,
 		.gain = 200,
 		.linelength = 0xD78,
-		.framelength = 149,
+		.framelength = 141,
 		.startx = 1320,
 		.starty = 990,
-		.endx = 1960,
-		.endy = 1481,
+		.endx = 2600,
+		.endy = 1609,
 		.width = 640,
 		.height = 128,
+		.binning = 2,
 		.test_pattern = 0
 	},
 
 	.mode_640x80_1000 = {	//camera output 640x80 pixel @1000 FPS
-		.pix_clk_mul = 0x58,
+		.pix_clk_mul = 0x53,
 		.pix_clk_div = 0x4,
-		.integration = 95,
+		.integration = 96 - 4,
 		.gain = 200,
 		.linelength = 0xD78,
-		.framelength = 102,
+		.framelength = 96,
 		.startx = 1320,
 		.starty = 990,
-		.endx = 1960,
-		.endy = 1481,
+		.endx = 2600,
+		.endy = 1561,
 		.width = 640,
 		.height = 80,
+		.binning = 2,
 		.test_pattern = 0
 	},
 	.mode_3280x2464_15 = {	//full frame 3280x2464 @15FPS
 		.pix_clk_mul = 0x31,
 		.pix_clk_div = 0x5,
-		.integration = 3031 - 10,
+		.integration = 3031 - 4,
 		.gain = 200,
 		.linelength = 0xD78,
 		.framelength = 3031,
@@ -243,6 +252,7 @@ static image_sensor_config_t sensor_config = {
 		.endy = 2463,
 		.width = 3280,
 		.height = 2464,
+		.binning = 0,
 		.test_pattern = 0
 	},
 };
@@ -471,6 +481,16 @@ void sensor_configure_mode(imgsensor_mode_t * mode)
 	sensor_i2c_write(REG_TP_HEIGHT_MSB, GET_WORD_MSB(mode->height));
 	sensor_i2c_write(REG_TP_HEIGHT_LSB, GET_WORD_LSB(mode->height));
 
+	if ( mode->binning == 2)
+	{
+	sensor_i2c_write(REG_BINNING_H, 0x03);
+	sensor_i2c_write(REG_BINNING_V, 0x03);
+	}
+	else
+	{
+		sensor_i2c_write(REG_BINNING_H, 0x00);
+		sensor_i2c_write(REG_BINNING_V, 0x00);
+	}
 	camera_stream_on(sensor_config.sensor_mode);
 }
 

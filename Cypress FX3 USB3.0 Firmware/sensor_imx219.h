@@ -127,6 +127,7 @@ typedef struct imgsensor_mode_struct_s {
 	uint16_t 	width;
 	uint16_t 	height;
 	uint16_t 	framerate;
+	uint8_t 	binning;
 	uint8_t		test_pattern;
 } imgsensor_mode_t;
 

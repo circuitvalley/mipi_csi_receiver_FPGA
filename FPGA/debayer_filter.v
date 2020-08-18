@@ -61,7 +61,7 @@ reg [9:0]G3[3:0];
 reg [9:0]G4[3:0];
 
 reg [1:0]read_ram_index; 	//which line RAM is being focused to read, not which address is being read from line RAM
-reg [3:0]write_ram_select;	//which line RAM is begin written
+reg [3:0]write_ram_select;	//which line RAM is being written
 reg [9:0]line_address; 		//which address is being read and written 
 reg [(INPUT_WIDTH-1):0]last_ram_outputs[3:0]; //one clock cycle delayed output of line RAMs
 reg [(INPUT_WIDTH-1):0]last_ram_outputs_stage2[3:0]; //two clock cycle delayed output of RAMs 

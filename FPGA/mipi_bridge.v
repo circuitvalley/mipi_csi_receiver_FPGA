@@ -139,7 +139,7 @@ mipi_rx_byte_aligner mipi_rx_byte_aligner_3(	.clk_i(mipi_byte_clock),
 									.byte_o( byte_aligned[31:24]),
 									.byte_valid_o(is_byte_valid[3]));
 
-mipi_rx_lane_aligner mipi_rx_byte_aligner_4(	.clk_i(mipi_byte_clock),
+mipi_rx_lane_aligner mipi_rx_lane_aligner(	.clk_i(mipi_byte_clock),
 									.reset_i(reset),
 									.bytes_valid_i(is_byte_valid),
 									.byte_i(byte_aligned),

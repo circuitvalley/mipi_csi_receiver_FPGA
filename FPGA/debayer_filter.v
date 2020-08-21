@@ -11,7 +11,7 @@ work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.
 */
 
 /*
-Takes 4x10bit pixel from RAW10 depacker module @mipi byte clock output 4x24bit RGB for each pixel , output is delayed by 2 lines 
+Takes 4x10bit pixel from RAW10 depacker module @mipi byte clock output 4x30bit RGB for each pixel , output is delayed by 2 lines 
 Implement Basic Debayer filter, As debayer need pixel infrom neighboring pixel which may be on next or previous display line,
 so input data is written onto RAM, only 4 lines are stored in RAM at one time and only three of the readable at any give time , RAM to which data is written to can not be read. 
 as we have enough info in RAM,4 10bit pixel will be coverted to 4x24bit RGB output
@@ -28,7 +28,7 @@ module debayer_filter(clk_i,
 					  debug_out);
 					  
 localparam INPUT_WIDTH = 40;	//4 x 10bit pixels from raw10 depacker module 
-localparam OUTPUT_WIDTH = 120;  //4 x 24bit RGB output 
+localparam OUTPUT_WIDTH = 120;  //4 x 30bit RGB output 
 
 input clk_i;
 input reset_i;
@@ -170,6 +170,7 @@ begin
 	if (reset_i)
 	begin
 		output_valid_o <= 1'b0;
+		data_valid_reg <= 1'b0;
 	end
 	else
 	begin

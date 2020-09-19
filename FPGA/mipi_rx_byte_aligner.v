@@ -16,7 +16,7 @@ Bytes on MIPI lane does not have any defined byte boundary so this modules Looks
 once 0xB8 is found, byte boundary offset is determined, set output valid to active and start outputting correct bytes
 stays reset when data lane are in MIPI LP state , modules will omit maximum 2 last bytes because of reset constrains. 
 
-V1.1 Sep 2020, Same funtioncality but achive better timings. 
+V1.1 Sep 2020, Same functionality but achieve better timings. 
 */
 
 
@@ -43,7 +43,7 @@ wire [16:0]word;
 
 reg [7:0] output_reg;
 reg valid_reg;
-reg valid_reg_stage2;
+reg valid_reg_stage2;		//needed to keep byte_valid_o high for one extra clock
 assign word = {byte_i, last_byte};
 
 
@@ -98,5 +98,3 @@ begin
 	end
 end
 endmodule
-						
-						

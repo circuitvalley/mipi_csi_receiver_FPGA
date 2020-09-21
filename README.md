@@ -1,7 +1,7 @@
 # MIPI CSI-2 Receiver on FPGA , USB 3.0 UVC 2Gbps Video Stream Over Cypress FX3
 
 
-# WIP improvement are being performed, latest release is commit form 21 Aug 2020 a7a513150960b187d27331c5da0e363020a87693
+## WIP: Improvement are being performed, latest release is commit form 21 Aug 2020 a7a513150960b187d27331c5da0e363020a87693
 
 This Repo contains hardware, Verilog source and USB3.0 USB video device class (UVC) Controller C source for generic FPGA CSI receiver. No FPGA hardware specific components has been used so can be easily ported to any low cost FPGA. 
 

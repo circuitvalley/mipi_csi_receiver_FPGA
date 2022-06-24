@@ -18,7 +18,7 @@ Test Has been done at</br>
 640x128   682FPS</br>
 640x80    1000FPS</br>
 
-### Now Lagacy Version!,  New version available
+### This is Now Lagacy Version! New version available. 
 I have published an improved version of FPGA ISP implimention, New version support versious Image format with variable Pipleline width and Higher speed also decoulped Output clock to achive higer thowput , here you can find source of new version here. 
 https://github.com/circuitvalley/USB_C_Industrial_Camera_FPGA_USB3
 

@@ -19,7 +19,7 @@ Test Has been done at</br>
 640x80    1000FPS</br>
 
 ### This is Now Legacy Version! New version available. 
-I have published an improved version of FPGA ISP implimention, New version support versious Image format with variable Pipleline width and Higher speed also decoulped Output clock to achive higer thowput , here you can find source of new version here. 
+I have published an improved version of FPGA ISP implimention, New version support versious Image format with variable Pipleline width and Higher speed also decoulped Output clock to achive higer throughput , here you can find source of new version here. 
 https://github.com/circuitvalley/USB_C_Industrial_Camera_FPGA_USB3
 
 MIPI CSI-2 Receiver on Lattice FPGA (c) by Gaurav Singh www.CircuitValley.com
